@@ -108,6 +108,31 @@ public class MultiInvokerMojoTest {
     }
 
     @Test
+    public void Can_invoke_the_current_if_invocation_id_is_null()
+        throws MojoFailureException, MojoExecutionException, MavenInvocationException {
+
+        final Properties properties = mock(Properties.class);
+        final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
+        final InvocationRequest request = mock(InvocationRequest.class);
+        final InvocationResult success = mock(InvocationResult.class);
+
+
+        // Given
+        given(session.getUserProperties()).willReturn(properties);
+        given(properties.getProperty(INVOCATION_ID)).willReturn(null);
+        given(configurationFactory.copy(mojo)).willReturn(configuration);
+        given(requestsFactory.create(project, session, configuration)).willReturn(singletonList(request));
+        given(invoker.execute(request)).willReturn(success);
+        given(success.getExitCode()).willReturn(0);
+
+        // When
+        mojo.execute();
+
+        // Then
+        then(success).should().getExitCode();
+    }
+
+    @Test
     public void Will_fail_correctly_if_the_invocations_are_incorrectly_configured()
         throws MojoFailureException, MojoExecutionException, MavenInvocationException {
 
