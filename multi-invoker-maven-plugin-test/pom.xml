@@ -93,19 +93,34 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.shiver-me-timbers</groupId>
-            <artifactId>multi-invoker-maven-plugin</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-model</artifactId>
             <version>3.3.9</version>
-            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>java-hamcrest</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.shiver-me-timbers</groupId>
+            <artifactId>smt-random</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.shiver-me-timbers</groupId>
+            <artifactId>smt-matchers</artifactId>
         </dependency>
     </dependencies>
 
     <modules>
         <module>once-for-each-profile</module>
+        <module>once-for-each-profile-parent</module>
     </modules>
 </project>

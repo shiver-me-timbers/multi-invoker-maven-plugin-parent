@@ -18,7 +18,7 @@ import static org.junit.Assert.assertThat;
 public class ITMultiInvokerMojo {
 
     @Test
-    public void Can_invoke_a_maven_child_project_once_for_each_profile() throws Exception {
+    public void Can_invoke_a_maven_project_once_for_each_profile() throws Exception {
 
         // Given
         final MavenXpp3Reader reader = new MavenXpp3Reader();

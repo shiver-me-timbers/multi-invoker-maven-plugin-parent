@@ -20,49 +20,30 @@
 
     <parent>
         <groupId>com.github.shiver-me-timbers</groupId>
-        <artifactId>multi-invoker-maven-plugin-test</artifactId>
+        <artifactId>once-for-each-profile-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>once-for-each-profile</artifactId>
+    <artifactId>once-for-each-profile-from-parent</artifactId>
 
     <name>${project.artifactId}</name>
 
-    <description>
-        This pom test that the multi-invoker-maven-plugin can run the current project once for each profile in the
-        current pom.
-    </description>
+    <description>This pom tests to see if the multi-invoker-maven-plugin can be used from a parent pom.</description>
 
     <profiles>
         <profile>
-            <id>profile-one</id>
+            <id>child-profile-one</id>
         </profile>
         <profile>
-            <id>profile-two</id>
+            <id>child-profile-two</id>
         </profile>
         <profile>
-            <id>profile-three</id>
+            <id>child-profile-three</id>
         </profile>
     </profiles>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>com.github.shiver-me-timbers</groupId>
-                <artifactId>multi-invoker-maven-plugin</artifactId>
-                <version>1.0-SNAPSHOT</version>
-                <executions>
-                    <execution>
-                        <id>multi-invoker</id>
-                        <goals>
-                            <goal>invoker</goal>
-                        </goals>
-                        <configuration>
-                            <forEachProfile>true</forEachProfile>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.8</version>
