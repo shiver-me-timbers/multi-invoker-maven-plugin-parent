@@ -1,6 +1,8 @@
 package shiver.me.timbers.plugins.invoker.multi;
 
+import org.apache.maven.model.Profile;
 import org.codehaus.plexus.component.annotations.Component;
+import org.codehaus.plexus.component.annotations.Requirement;
 
 /**
  * @author Karl Bennett
@@ -8,13 +10,24 @@ import org.codehaus.plexus.component.annotations.Component;
 @Component(role = MultiInvokerConfigurationFactory.class, hint = "default")
 class DefaultMultiInvokerConfigurationFactory implements MultiInvokerConfigurationFactory {
 
+    @Requirement
+    private MultiInvokerConfigurationBuilderFactory configurationBuilderFactory;
+
+    DefaultMultiInvokerConfigurationFactory() {
+    }
+
+    DefaultMultiInvokerConfigurationFactory(MultiInvokerConfigurationBuilderFactory configurationBuilderFactory) {
+        this.configurationBuilderFactory = configurationBuilderFactory;
+    }
+
     @Override
     public MultiInvokerConfiguration copy(MultiInvokerConfiguration configuration) {
         return new ImmutableMultiInvokerConfiguration(configuration);
     }
 
     @Override
-    public MultiInvokerConfigurationBuilder buildFrom(MultiInvokerConfiguration configuration) {
-        return new ConfigurationMultiInvokerConfigurationBuilder(configuration);
+    public MultiInvokerConfiguration forProfile(MultiInvokerConfiguration configuration, Profile profile) {
+        final String id = profile.getId();
+        return configurationBuilderFactory.createWith(configuration).withInvocationId(id).withProfile(id).build();
     }
 }

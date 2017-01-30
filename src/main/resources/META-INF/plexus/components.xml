@@ -24,5 +24,13 @@
             <description/>
             <isolated-realm>false</isolated-realm>
         </component>
+        <component>
+            <role>shiver.me.timbers.plugins.invoker.multi.MultiInvokerConfigurationBuilderFactory</role>
+            <role-hint>default</role-hint>
+            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultMultiInvokerConfigurationBuilderFactory
+            </implementation>
+            <description/>
+            <isolated-realm>false</isolated-realm>
+        </component>
     </components>
 </component-set>

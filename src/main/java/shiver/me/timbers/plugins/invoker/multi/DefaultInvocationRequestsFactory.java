@@ -41,11 +41,12 @@ class DefaultInvocationRequestsFactory implements InvocationRequestsFactory {
     ) {
         final List<InvocationRequest> requests = new ArrayList<>();
         for (Profile profile : project.getModel().getProfiles()) {
-            final String id = profile.getId();
-            requests.add(requestFactory.create(
-                project,
-                session,
-                configurationFactory.buildFrom(configuration).withInvocationId(id).withProfile(id).build())
+            requests.add(
+                requestFactory.create(
+                    project,
+                    session,
+                    configurationFactory.forProfile(configuration, profile)
+                )
             );
         }
         return requests;

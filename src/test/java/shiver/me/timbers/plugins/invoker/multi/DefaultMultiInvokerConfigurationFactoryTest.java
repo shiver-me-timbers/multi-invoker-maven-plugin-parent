@@ -1,5 +1,6 @@
 package shiver.me.timbers.plugins.invoker.multi;
 
+import org.apache.maven.model.Profile;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,15 +13,22 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static shiver.me.timbers.data.random.RandomBooleans.someBoolean;
 import static shiver.me.timbers.data.random.RandomStrings.someString;
-import static shiver.me.timbers.matchers.Matchers.hasField;
 
 public class DefaultMultiInvokerConfigurationFactoryTest {
 
+    private MultiInvokerConfigurationBuilderFactory configurationBuilderFactory;
     private DefaultMultiInvokerConfigurationFactory factory;
+
 
     @Before
     public void setUp() {
-        factory = new DefaultMultiInvokerConfigurationFactory();
+        configurationBuilderFactory = mock(MultiInvokerConfigurationBuilderFactory.class);
+        factory = new DefaultMultiInvokerConfigurationFactory(configurationBuilderFactory);
+    }
+
+    @Test
+    public void Instantiation_for_coverage() {
+        new DefaultMultiInvokerConfigurationFactory();
     }
 
     @Test
@@ -44,19 +52,30 @@ public class DefaultMultiInvokerConfigurationFactoryTest {
     }
 
     @Test
-    public void Can_create_a_builder_from_an_existing_configuration() {
+    public void Can_create_an_invocation_request_for_each_profile_defined_in_the_current_pom_file() {
 
         final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
+        final Profile profile = mock(Profile.class);
 
-        final Boolean forEachProfile = someBoolean();
+        final String id = someString();
+        final MultiInvokerConfigurationBuilder configurationBuilder = mock(MultiInvokerConfigurationBuilder.class);
+        final MultiInvokerConfigurationBuilder configurationBuilderInvocationId = mock(MultiInvokerConfigurationBuilder.class);
+        final MultiInvokerConfigurationBuilder configurationBuilderProfile = mock(MultiInvokerConfigurationBuilder.class);
+
+        final MultiInvokerConfiguration expected = mock(MultiInvokerConfiguration.class);
 
         // Given
-        given(configuration.isForEachProfile()).willReturn(forEachProfile);
+        given(configurationBuilderFactory.createWith(configuration)).willReturn(configurationBuilder);
+        given(configuration.isForEachProfile()).willReturn(true);
+        given(profile.getId()).willReturn(id);
+        given(configurationBuilder.withInvocationId(id)).willReturn(configurationBuilderInvocationId);
+        given(configurationBuilderInvocationId.withProfile(id)).willReturn(configurationBuilderProfile);
+        given(configurationBuilderProfile.build()).willReturn(expected);
 
         // When
-        final MultiInvokerConfigurationBuilder builder = factory.buildFrom(configuration);
+        final MultiInvokerConfiguration actual = factory.forProfile(configuration, profile);
 
         // Then
-        assertThat(builder, hasField("forEachProfile", forEachProfile));
+        assertThat(actual, is(expected));
     }
 }
