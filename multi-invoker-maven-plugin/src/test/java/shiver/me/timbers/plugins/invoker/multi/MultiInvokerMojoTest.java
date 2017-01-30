@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.List;
+import java.util.Properties;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -23,16 +24,17 @@ import static org.hamcrest.Matchers.empty;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
 import static shiver.me.timbers.data.random.RandomBooleans.someBoolean;
 import static shiver.me.timbers.data.random.RandomIntegers.someIntegerGreaterThan;
 import static shiver.me.timbers.data.random.RandomStrings.someString;
+import static shiver.me.timbers.plugins.invoker.multi.MultiInvokerMojo.INVOCATION_ID;
 
 public class MultiInvokerMojoTest {
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
+
     private MavenProject project;
     private MavenSession session;
     private MultiInvokerConfigurationFactory configurationFactory;
@@ -56,7 +58,7 @@ public class MultiInvokerMojoTest {
     }
 
     @Test
-    public void Can_invoke_the_current_project_for_multiple_times()
+    public void Can_invoke_the_current_project_multiple_times()
         throws MojoFailureException, MojoExecutionException, MavenInvocationException {
 
         final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
@@ -78,6 +80,31 @@ public class MultiInvokerMojoTest {
 
         // Then
         then(success).should(times(3)).getExitCode();
+    }
+
+    @Test
+    public void Can_invoke_the_current_if_invocation_id_is_empty()
+        throws MojoFailureException, MojoExecutionException, MavenInvocationException {
+
+        final Properties properties = mock(Properties.class);
+        final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
+        final InvocationRequest request = mock(InvocationRequest.class);
+        final InvocationResult success = mock(InvocationResult.class);
+
+
+        // Given
+        given(session.getUserProperties()).willReturn(properties);
+        given(properties.getProperty(INVOCATION_ID)).willReturn("");
+        given(configurationFactory.copy(mojo)).willReturn(configuration);
+        given(requestsFactory.create(project, session, configuration)).willReturn(singletonList(request));
+        given(invoker.execute(request)).willReturn(success);
+        given(success.getExitCode()).willReturn(0);
+
+        // When
+        mojo.execute();
+
+        // Then
+        then(success).should().getExitCode();
     }
 
     @Test
@@ -164,5 +191,24 @@ public class MultiInvokerMojoTest {
 
         // Then
         assertThat(actual, is(empty()));
+    }
+
+    @Test
+    public void Will_not_invoke_anything_if_run_from_within_a_multi_invocation()
+        throws MojoFailureException, MojoExecutionException {
+
+        final Properties properties = mock(Properties.class);
+
+        // Given
+        given(session.getUserProperties()).willReturn(properties);
+        given(properties.getProperty(INVOCATION_ID)).willReturn(someString());
+
+        // When
+        mojo.execute();
+
+        // Then
+        then(session).should().getUserProperties();
+        verifyNoMoreInteractions(session);
+        verifyZeroInteractions(project, configurationFactory, requestsFactory, invoker);
     }
 }

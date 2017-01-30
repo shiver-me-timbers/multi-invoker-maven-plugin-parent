@@ -15,26 +15,20 @@
   ~ limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.shiver-me-timbers.multi.invoker.test</groupId>
+    <parent>
+        <groupId>com.github.shiver-me-timbers</groupId>
+        <artifactId>multi-invoker-maven-plugin-test</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
     <artifactId>once-for-each-profile</artifactId>
 
-    <version>1.0-SNAPSHOT</version>
-
     <name>${project.artifactId}</name>
 
-    <description>
-        This project is used to test that the multi-invoker-maven-plugin plugin will run once for each profile in the
-        pom.xml file.
-    </description>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <description>This is the parent pom to all the multi-invoker-maven-plugin test projects.</description>
 
     <profiles>
         <profile>
@@ -54,9 +48,17 @@
                 <groupId>com.github.shiver-me-timbers</groupId>
                 <artifactId>multi-invoker-maven-plugin</artifactId>
                 <version>1.0-SNAPSHOT</version>
-                <configuration>
-                    <forEachProfile>true</forEachProfile>
-                </configuration>
+                <executions>
+                    <execution>
+                        <id>multi-invoker</id>
+                        <goals>
+                            <goal>invoker</goal>
+                        </goals>
+                        <configuration>
+                            <forEachProfile>true</forEachProfile>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -67,23 +69,12 @@
                         <configuration>
                             <target>
                                 <echo message="Invocation Id: ${invocation.id}"/>
-                                <touch file="${project.build.directory}/${invocation.id}"/>
+                                <touch file="${project.build.directory}/touch-file${invocation.id}"/>
                             </target>
                         </configuration>
                         <goals>
                             <goal>run</goal>
                         </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
-                <executions>
-                    <execution>
-                        <id>default-jar</id>
-                        <phase>none</phase>
                     </execution>
                 </executions>
             </plugin>

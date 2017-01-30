@@ -15,6 +15,7 @@ import org.apache.maven.shared.invoker.MavenInvocationException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PACKAGE;
 
@@ -41,7 +42,7 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
     @Component
     private Invoker invoker;
 
-    @Parameter(readonly = true, defaultValue = "false")
+    @Parameter(defaultValue = "false")
     private boolean forEachProfile;
 
     /**
@@ -66,6 +67,9 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
+        if (isRunFromMultiInvocation()) {
+            return;
+        }
         final List<InvocationRequest> requests = requestsFactory
             .create(project, session, configurationFactory.copy(this));
         for (InvocationRequest request : requests) {
@@ -98,5 +102,14 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
     @Override
     public List<String> getProfiles() {
         return new ArrayList<>();
+    }
+
+    private boolean isRunFromMultiInvocation() {
+        final Properties properties = session.getUserProperties();
+        if (properties != null) {
+            final String invocationId = properties.getProperty(INVOCATION_ID);
+            return invocationId != null && !invocationId.isEmpty();
+        }
+        return false;
     }
 }
