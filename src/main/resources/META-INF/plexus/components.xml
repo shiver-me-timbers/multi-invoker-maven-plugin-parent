@@ -32,5 +32,21 @@
             <description/>
             <isolated-realm>false</isolated-realm>
         </component>
+        <component>
+            <role>shiver.me.timbers.plugins.invoker.multi.OutputHandlerFactory</role>
+            <role-hint>default</role-hint>
+            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultOutputHandlerFactory
+            </implementation>
+            <description/>
+            <isolated-realm>false</isolated-realm>
+        </component>
+        <component>
+            <role>shiver.me.timbers.plugins.invoker.multi.PropertiesAppender</role>
+            <role-hint>default</role-hint>
+            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultPropertiesAppender
+            </implementation>
+            <description/>
+            <isolated-realm>false</isolated-realm>
+        </component>
     </components>
 </component-set>

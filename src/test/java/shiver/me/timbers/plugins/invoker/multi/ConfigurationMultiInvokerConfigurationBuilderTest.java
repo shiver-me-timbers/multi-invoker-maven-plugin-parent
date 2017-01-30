@@ -1,5 +1,6 @@
 package shiver.me.timbers.plugins.invoker.multi;
 
+import org.apache.maven.plugin.logging.Log;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -66,11 +67,13 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
     @Test
     public void Can_build_a_configuration() {
 
+        final Log log = mock(Log.class);
         final String invocationId = someString();
         final Boolean forEachProfile = someBoolean();
         final List<String> profiles = asList(someString(), someString(), someString());
 
         // Given
+        given(configuration.getLog()).willReturn(log);
         given(configuration.getInvocationId()).willReturn(invocationId);
         given(configuration.isForEachProfile()).willReturn(forEachProfile);
         given(configuration.getProfiles()).willReturn(profiles);
@@ -80,6 +83,7 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
             .build();
 
         // Then
+        assertThat(actual.getLog(), is(log));
         assertThat(actual.getInvocationId(), is(invocationId));
         assertThat(actual.isForEachProfile(), is(forEachProfile));
         assertThat(actual.getProfiles(), is(profiles));
