@@ -44,6 +44,8 @@
 
     <profiles>
         <profile>
+            <!-- This profile must be run with the 'install' phase so that the plugin is installed locally and -->
+            <!-- accessible by the integration test modules. -->
             <id>integration-test</id>
             <modules>
                 <module>multi-invoker-maven-plugin-test</module>

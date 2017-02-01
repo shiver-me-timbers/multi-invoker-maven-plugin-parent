@@ -43,6 +43,7 @@
             <id>run-tests</id>
             <activation>
                 <property>
+                    <!-- We don't want to run the integration tests during the multi-invoker-maven-plugin builds. -->
                     <name>!invocation.id</name>
                 </property>
             </activation>
@@ -67,25 +68,6 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
                     <skip>${skip-failsafe}</skip>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
-                <executions>
-                    <execution>
-                        <id>default-jar</id>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>2.5.2</version>
-                <configuration>
-                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>
@@ -120,6 +102,7 @@
     </dependencies>
 
     <modules>
+        <module>once-for-each-profile-it</module>
         <module>once-for-each-profile</module>
         <module>once-for-each-profile-parent</module>
     </modules>

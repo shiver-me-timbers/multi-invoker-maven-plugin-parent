@@ -62,6 +62,22 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <dependenciesToScan>
+                        <depedency>com.github.shiver-me-timbers:once-for-each-profile-it</depedency>
+                    </dependenciesToScan>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.github.shiver-me-timbers</groupId>
+                        <artifactId>once-for-each-profile-it</artifactId>
+                        <version>1.0-SNAPSHOT</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
 
         <directory>${project.basedir}/target/${invocation.id}</directory>
