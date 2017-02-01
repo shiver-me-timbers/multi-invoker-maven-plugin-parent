@@ -14,9 +14,11 @@ class ImmutableMultiInvokerConfiguration implements MultiInvokerConfiguration {
     private final List<String> profiles;
     private final String invocationId;
     private final Log log;
+    private final List<String> items;
 
     ImmutableMultiInvokerConfiguration(MultiInvokerConfiguration configuration) {
         forEachProfile = configuration.isForEachProfile();
+        items = new ArrayList<>(configuration.getItems());
         profiles = new ArrayList<>(configuration.getProfiles());
         invocationId = configuration.getInvocationId();
         log = configuration.getLog();
@@ -40,5 +42,10 @@ class ImmutableMultiInvokerConfiguration implements MultiInvokerConfiguration {
     @Override
     public List<String> getProfiles() {
         return profiles;
+    }
+
+    @Override
+    public List<String> getItems() {
+        return items;
     }
 }

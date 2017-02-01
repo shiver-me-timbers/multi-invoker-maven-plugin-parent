@@ -70,11 +70,13 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
         final Log log = mock(Log.class);
         final String invocationId = someString();
         final Boolean forEachProfile = someBoolean();
+        final List<String> items = asList(someString(), someString(), someString());
         final List<String> profiles = asList(someString(), someString(), someString());
 
         // Given
         given(configuration.getLog()).willReturn(log);
         given(configuration.getInvocationId()).willReturn(invocationId);
+        given(configuration.getItems()).willReturn(items);
         given(configuration.isForEachProfile()).willReturn(forEachProfile);
         given(configuration.getProfiles()).willReturn(profiles);
 
@@ -86,6 +88,7 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
         assertThat(actual.getLog(), is(log));
         assertThat(actual.getInvocationId(), is(invocationId));
         assertThat(actual.isForEachProfile(), is(forEachProfile));
-        assertThat(actual.getProfiles(), is(profiles));
+        assertThat(actual.getItems(), equalTo(items));
+        assertThat(actual.getProfiles(), equalTo(profiles));
     }
 }

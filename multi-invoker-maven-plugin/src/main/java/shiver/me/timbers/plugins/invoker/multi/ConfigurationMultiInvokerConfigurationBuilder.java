@@ -11,12 +11,14 @@ import java.util.List;
 class ConfigurationMultiInvokerConfigurationBuilder implements MultiInvokerConfigurationBuilder {
 
     private final boolean forEachProfile;
+    private final List<String> items;
     private final List<String> profiles;
     private String invocationId;
     private final Log log;
 
     ConfigurationMultiInvokerConfigurationBuilder(MultiInvokerConfiguration configuration) {
         forEachProfile = configuration.isForEachProfile();
+        items = new ArrayList<>(configuration.getItems());
         profiles = new ArrayList<>(configuration.getProfiles());
         invocationId = configuration.getInvocationId();
         log = configuration.getLog();
@@ -55,6 +57,11 @@ class ConfigurationMultiInvokerConfigurationBuilder implements MultiInvokerConfi
             @Override
             public List<String> getProfiles() {
                 return profiles;
+            }
+
+            @Override
+            public List<String> getItems() {
+                return items;
             }
         });
     }

@@ -30,4 +30,9 @@ class DefaultMultiInvokerConfigurationFactory implements MultiInvokerConfigurati
         final String id = profile.getId();
         return configurationBuilderFactory.createWith(configuration).withInvocationId(id).withProfile(id).build();
     }
+
+    @Override
+    public MultiInvokerConfiguration forItem(MultiInvokerConfiguration configuration, String item) {
+        return configurationBuilderFactory.createWith(configuration).withInvocationId(item).build();
+    }
 }

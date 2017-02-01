@@ -39,6 +39,17 @@ class DefaultInvocationRequestsFactory implements InvocationRequestsFactory {
         MavenSession session,
         MultiInvokerConfiguration configuration
     ) {
+        if (configuration.isForEachProfile()) {
+            return createRequestsForProfiles(project, session, configuration);
+        }
+        return createRequestsForItems(project, session, configuration);
+    }
+
+    private List<InvocationRequest> createRequestsForProfiles(
+        MavenProject project,
+        MavenSession session,
+        MultiInvokerConfiguration configuration
+    ) {
         final List<InvocationRequest> requests = new ArrayList<>();
         for (Profile profile : project.getModel().getProfiles()) {
             requests.add(
@@ -46,6 +57,24 @@ class DefaultInvocationRequestsFactory implements InvocationRequestsFactory {
                     project,
                     session,
                     configurationFactory.forProfile(configuration, profile)
+                )
+            );
+        }
+        return requests;
+    }
+
+    private List<InvocationRequest> createRequestsForItems(
+        MavenProject project,
+        MavenSession session,
+        MultiInvokerConfiguration configuration
+    ) {
+        final List<InvocationRequest> requests = new ArrayList<>();
+        for (String item : configuration.getItems()) {
+            requests.add(
+                requestFactory.create(
+                    project,
+                    session,
+                    configurationFactory.forItem(configuration, item)
                 )
             );
         }

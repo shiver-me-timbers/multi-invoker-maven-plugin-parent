@@ -17,16 +17,22 @@ import org.junit.rules.ExpectedException;
 import java.util.List;
 import java.util.Properties;
 
+import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static shiver.me.timbers.data.random.RandomBooleans.someBoolean;
 import static shiver.me.timbers.data.random.RandomIntegers.someIntegerGreaterThan;
+import static shiver.me.timbers.data.random.RandomStrings.someAlphanumericString;
 import static shiver.me.timbers.data.random.RandomStrings.someString;
 import static shiver.me.timbers.plugins.invoker.multi.MultiInvokerMojo.INVOCATION_ID;
 
@@ -216,6 +222,52 @@ public class MultiInvokerMojoTest {
 
         // Then
         assertThat(actual, is(empty()));
+    }
+
+    @Test
+    public void Can_set_the_invocations_to_run_for_each_configured_item()
+        throws MojoFailureException, MojoExecutionException, MavenInvocationException {
+
+        final String item1 = someAlphanumericString();
+        final String item2 = someAlphanumericString();
+        final String item3 = someAlphanumericString();
+
+        // Given
+        mojo.withItems(format("%s,%s,%s", item1, item2, item3));
+
+        // When
+        final List<String> actual = mojo.getItems();
+
+        // Then
+        assertThat(actual, contains(item1, item2, item3));
+    }
+
+    @Test
+    public void Can_leave_the_items_empty()
+        throws MojoFailureException, MojoExecutionException, MavenInvocationException {
+
+        // Given
+        mojo.withItems("");
+
+        // When
+        final List<String> actual = mojo.getItems();
+
+        // Then
+        assertThat(actual, empty());
+    }
+
+    @Test
+    public void Can_leave_the_items_blank()
+        throws MojoFailureException, MojoExecutionException, MavenInvocationException {
+
+        // Given
+        mojo.withItems(null);
+
+        // When
+        final List<String> actual = mojo.getItems();
+
+        // Then
+        assertThat(actual, empty());
     }
 
     @Test

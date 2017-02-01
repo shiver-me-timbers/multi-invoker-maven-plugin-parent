@@ -10,4 +10,6 @@ interface MultiInvokerConfigurationFactory {
     MultiInvokerConfiguration copy(MultiInvokerConfiguration configuration);
 
     MultiInvokerConfiguration forProfile(MultiInvokerConfiguration configuration, Profile profile);
+
+    MultiInvokerConfiguration forItem(MultiInvokerConfiguration configuration, String item);
 }

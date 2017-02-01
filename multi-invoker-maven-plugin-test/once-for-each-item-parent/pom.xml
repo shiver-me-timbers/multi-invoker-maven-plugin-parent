@@ -24,26 +24,19 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>once-for-each-profile</artifactId>
+    <artifactId>once-for-each-item-parent</artifactId>
+
+    <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
 
     <description>
-        This pom test that the multi-invoker-maven-plugin can run the current project once for each profile in the
-        current pom.
+        This is the parent pom contains the multi-invoker-maven-plugin so that it can be tested from a child module.
     </description>
 
-    <profiles>
-        <profile>
-            <id>profile-one</id>
-        </profile>
-        <profile>
-            <id>profile-two</id>
-        </profile>
-        <profile>
-            <id>profile-three</id>
-        </profile>
-    </profiles>
+    <properties>
+        <test-items/>
+    </properties>
 
     <build>
         <plugins>
@@ -58,23 +51,10 @@
                             <goal>invoker</goal>
                         </goals>
                         <configuration>
-                            <forEachProfile>true</forEachProfile>
+                            <items>${test-items}</items>
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <configuration>
-                    <dependenciesToScan>
-                        <depedency>com.github.shiver-me-timbers:once-for-each-profile-it</depedency>
-                    </dependenciesToScan>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -96,15 +76,9 @@
                 </executions>
             </plugin>
         </plugins>
-
-        <directory>${project.basedir}/target/${invocation.id}</directory>
     </build>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.github.shiver-me-timbers</groupId>
-            <artifactId>once-for-each-profile-it</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>once-for-each-item-from-parent</module>
+    </modules>
 </project>

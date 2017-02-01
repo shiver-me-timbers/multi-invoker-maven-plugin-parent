@@ -24,26 +24,17 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>once-for-each-profile</artifactId>
+    <artifactId>once-for-each-item</artifactId>
 
     <name>${project.artifactId}</name>
 
     <description>
-        This pom test that the multi-invoker-maven-plugin can run the current project once for each profile in the
-        current pom.
+        This pom test that the multi-invoker-maven-plugin can run the current project once for each configured item.
     </description>
 
-    <profiles>
-        <profile>
-            <id>profile-one</id>
-        </profile>
-        <profile>
-            <id>profile-two</id>
-        </profile>
-        <profile>
-            <id>profile-three</id>
-        </profile>
-    </profiles>
+    <properties>
+        <test-items>item-one,item-two,item-three</test-items>
+    </properties>
 
     <build>
         <plugins>
@@ -58,21 +49,35 @@
                             <goal>invoker</goal>
                         </goals>
                         <configuration>
-                            <forEachProfile>true</forEachProfile>
+                            <items>${test-items}</items>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <executions>
+                    <execution>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <target>
+                                <echo message="Invocation Id: ${invocation.id}"/>
+                                <touch file="${project.build.directory}/touch-file${invocation.id}"/>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
                     <dependenciesToScan>
-                        <depedency>com.github.shiver-me-timbers:once-for-each-profile-it</depedency>
+                        <depedency>com.github.shiver-me-timbers:once-for-each-item-it</depedency>
                     </dependenciesToScan>
                 </configuration>
             </plugin>
@@ -103,7 +108,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.shiver-me-timbers</groupId>
-            <artifactId>once-for-each-profile-it</artifactId>
+            <artifactId>once-for-each-item-it</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

@@ -20,27 +20,19 @@
 
     <parent>
         <groupId>com.github.shiver-me-timbers</groupId>
-        <artifactId>once-for-each-profile-parent</artifactId>
+        <artifactId>once-for-each-item-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>once-for-each-profile-from-parent</artifactId>
+    <artifactId>once-for-each-item-from-parent</artifactId>
 
     <name>${project.artifactId}</name>
 
     <description>This pom tests to see if the multi-invoker-maven-plugin can be used from a parent pom.</description>
 
-    <profiles>
-        <profile>
-            <id>child-profile-one</id>
-        </profile>
-        <profile>
-            <id>child-profile-two</id>
-        </profile>
-        <profile>
-            <id>child-profile-three</id>
-        </profile>
-    </profiles>
+    <properties>
+        <test-items>item-one,item-two,item-three</test-items>
+    </properties>
 
     <build>
         <plugins>
@@ -53,7 +45,7 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
                     <dependenciesToScan>
-                        <depedency>com.github.shiver-me-timbers:once-for-each-profile-it</depedency>
+                        <depedency>com.github.shiver-me-timbers:once-for-each-item-it</depedency>
                     </dependenciesToScan>
                 </configuration>
             </plugin>
@@ -65,7 +57,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.shiver-me-timbers</groupId>
-            <artifactId>once-for-each-profile-it</artifactId>
+            <artifactId>once-for-each-item-it</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

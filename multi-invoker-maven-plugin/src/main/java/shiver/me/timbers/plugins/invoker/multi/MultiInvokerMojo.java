@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import static java.util.Arrays.asList;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PACKAGE;
 
 /**
@@ -44,6 +45,9 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
 
     @Parameter(defaultValue = "false")
     private boolean forEachProfile;
+
+    @Parameter
+    private String items;
 
     /**
      * All Maven plugins must have a default constructor.
@@ -84,11 +88,6 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
         }
     }
 
-    MultiInvokerMojo forEachProfile(boolean forEachProfile) {
-        this.forEachProfile = forEachProfile;
-        return this;
-    }
-
     @Override
     public String getInvocationId() {
         return getClass().getSimpleName();
@@ -99,9 +98,27 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
         return forEachProfile;
     }
 
+    MultiInvokerMojo forEachProfile(boolean forEachProfile) {
+        this.forEachProfile = forEachProfile;
+        return this;
+    }
+
     @Override
     public List<String> getProfiles() {
         return new ArrayList<>();
+    }
+
+    @Override
+    public List<String> getItems() {
+        if (items == null || items.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return asList(items.split(","));
+    }
+
+    MultiInvokerMojo withItems(String items) {
+        this.items = items;
+        return this;
     }
 
     private boolean isRunFromMultiInvocation() {
