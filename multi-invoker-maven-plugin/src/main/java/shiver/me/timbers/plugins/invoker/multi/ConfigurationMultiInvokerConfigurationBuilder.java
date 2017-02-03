@@ -55,13 +55,13 @@ class ConfigurationMultiInvokerConfigurationBuilder implements MultiInvokerConfi
             }
 
             @Override
-            public List<String> getProfiles() {
-                return profiles;
+            public List<String> getItems() {
+                return items;
             }
 
             @Override
-            public List<String> getItems() {
-                return items;
+            public List<String> getProfiles() {
+                return profiles;
             }
         });
     }

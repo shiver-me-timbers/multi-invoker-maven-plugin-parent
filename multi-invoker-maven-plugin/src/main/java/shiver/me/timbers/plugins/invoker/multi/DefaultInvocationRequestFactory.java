@@ -18,6 +18,9 @@ import static shiver.me.timbers.plugins.invoker.multi.MultiInvokerMojo.INVOCATIO
 class DefaultInvocationRequestFactory implements InvocationRequestFactory {
 
     @Requirement
+    private MultiInvokerConfigurationReplacer configurationReplacer;
+
+    @Requirement
     private OutputHandlerFactory outputHandlerFactory;
 
     @Requirement
@@ -27,22 +30,25 @@ class DefaultInvocationRequestFactory implements InvocationRequestFactory {
     }
 
     DefaultInvocationRequestFactory(
+        MultiInvokerConfigurationReplacer configurationReplacer,
         OutputHandlerFactory outputHandlerFactory,
         PropertiesAppender propertiesAppender
     ) {
+        this.configurationReplacer = configurationReplacer;
         this.outputHandlerFactory = outputHandlerFactory;
         this.propertiesAppender = propertiesAppender;
     }
 
     @Override
     public InvocationRequest create(MavenProject project, MavenSession session, MultiInvokerConfiguration configuration) {
+        final MultiInvokerConfiguration replacedConfiguration = configurationReplacer.resolveSubstitutions(configuration);
         final InvocationRequest request = new DefaultInvocationRequest();
-        request.setOutputHandler(outputHandlerFactory.createFrom(configuration.getLog()));
-        request.setProfiles(configuration.getProfiles());
+        request.setOutputHandler(outputHandlerFactory.createFrom(replacedConfiguration.getLog()));
+        request.setProfiles(replacedConfiguration.getProfiles());
         request.setBaseDirectory(project.getBasedir());
         request.setPomFile(project.getFile());
         request.setGoals(session.getGoals());
-        request.setProperties(configureProperties(session, configuration));
+        request.setProperties(configureProperties(session, replacedConfiguration));
         return request;
     }
 

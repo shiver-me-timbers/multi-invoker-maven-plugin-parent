@@ -25,12 +25,14 @@ public class DefaultInvocationRequestFactoryTest {
     private OutputHandlerFactory outputHandlerFactory;
     private PropertiesAppender propertiesAppender;
     private DefaultInvocationRequestFactory factory;
+    private MultiInvokerConfigurationReplacer configurationReplacer;
 
     @Before
     public void setUp() {
         outputHandlerFactory = mock(OutputHandlerFactory.class);
         propertiesAppender = mock(PropertiesAppender.class);
-        factory = new DefaultInvocationRequestFactory(outputHandlerFactory, propertiesAppender);
+        configurationReplacer = mock(MultiInvokerConfigurationReplacer.class);
+        factory = new DefaultInvocationRequestFactory(configurationReplacer, outputHandlerFactory, propertiesAppender);
     }
 
     @Test
@@ -46,6 +48,7 @@ public class DefaultInvocationRequestFactoryTest {
         final MavenSession session = mock(MavenSession.class);
         final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
 
+        final MultiInvokerConfiguration replacedConfiguration = mock(MultiInvokerConfiguration.class);
         final Log log = mock(Log.class);
         final List<String> profiles = mock(List.class);
         final InvocationOutputHandler outputHandler = mock(InvocationOutputHandler.class);
@@ -58,8 +61,9 @@ public class DefaultInvocationRequestFactoryTest {
         final String invocationId = someString();
 
         // Given
-        given(configuration.getLog()).willReturn(log);
-        given(configuration.getProfiles()).willReturn(profiles);
+        given(configurationReplacer.resolveSubstitutions(configuration)).willReturn(replacedConfiguration);
+        given(replacedConfiguration.getLog()).willReturn(log);
+        given(replacedConfiguration.getProfiles()).willReturn(profiles);
         given(outputHandlerFactory.createFrom(log)).willReturn(outputHandler);
         given(project.getBasedir()).willReturn(baseDir);
         given(project.getFile()).willReturn(pomFile);
@@ -67,7 +71,7 @@ public class DefaultInvocationRequestFactoryTest {
         given(session.getSystemProperties()).willReturn(systemProperties);
         given(session.getUserProperties()).willReturn(userProperties);
         given(propertiesAppender.append(systemProperties, userProperties)).willReturn(properties);
-        given(configuration.getInvocationId()).willReturn(invocationId);
+        given(replacedConfiguration.getInvocationId()).willReturn(invocationId);
 
         // When
         final InvocationRequest actual = factory.create(project, session, configuration);

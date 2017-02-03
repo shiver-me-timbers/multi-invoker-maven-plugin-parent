@@ -17,6 +17,22 @@
             <isolated-realm>false</isolated-realm>
         </component>
         <component>
+            <role>shiver.me.timbers.plugins.invoker.multi.MultiInvokerConfigurationReplacer</role>
+            <role-hint>default</role-hint>
+            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultMultiInvokerConfigurationReplacer
+            </implementation>
+            <description/>
+            <isolated-realm>false</isolated-realm>
+        </component>
+        <component>
+            <role>shiver.me.timbers.plugins.invoker.multi.StringReplacer</role>
+            <role-hint>default</role-hint>
+            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultStringReplacer
+            </implementation>
+            <description/>
+            <isolated-realm>false</isolated-realm>
+        </component>
+        <component>
             <role>shiver.me.timbers.plugins.invoker.multi.InvocationRequestFactory</role>
             <role-hint>default</role-hint>
             <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultInvocationRequestFactory

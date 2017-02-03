@@ -24,22 +24,21 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>set-profiles</artifactId>
+    <artifactId>set-profile-with-item</artifactId>
 
     <name>${project.artifactId}</name>
 
     <description>
-        This pom test that custom profiles can be set for every multi-invoker-maven-plugin invocation.
+        This pom test that a profile can be set from the multi-invoker-maven-plugins "invocation.id" property.
     </description>
 
     <properties>
         <test-items>item-one,item-two,item-three</test-items>
-        <test-profiles>profile-one,profile-two,profile-three</test-profiles>
     </properties>
 
     <profiles>
         <profile>
-            <id>profile-one</id>
+            <id>profile-item-one</id>
             <build>
                 <plugins>
                     <plugin>
@@ -47,12 +46,12 @@
                         <artifactId>maven-antrun-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>profile-one</id>
+                                <id>profile-item-one</id>
                                 <phase>generate-resources</phase>
                                 <configuration>
                                     <target>
-                                        <echo message="Profile: profile-one"/>
-                                        <touch file="${project.build.directory}/touch-fileprofile-one"/>
+                                        <echo message="Profile: profile-item-one"/>
+                                        <touch file="${project.build.directory}/touch-fileprofile-item-one"/>
                                     </target>
                                 </configuration>
                                 <goals>
@@ -65,7 +64,7 @@
             </build>
         </profile>
         <profile>
-            <id>profile-two</id>
+            <id>profile-item-two</id>
             <build>
                 <plugins>
                     <plugin>
@@ -73,12 +72,12 @@
                         <artifactId>maven-antrun-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>profile-two</id>
+                                <id>profile-item-two</id>
                                 <phase>generate-resources</phase>
                                 <configuration>
                                     <target>
                                         <echo message="Profile: profile-two"/>
-                                        <touch file="${project.build.directory}/touch-fileprofile-two"/>
+                                        <touch file="${project.build.directory}/touch-fileprofile-item-two"/>
                                     </target>
                                 </configuration>
                                 <goals>
@@ -91,7 +90,7 @@
             </build>
         </profile>
         <profile>
-            <id>profile-three</id>
+            <id>profile-item-three</id>
             <build>
                 <plugins>
                     <plugin>
@@ -103,8 +102,8 @@
                                 <phase>generate-resources</phase>
                                 <configuration>
                                     <target>
-                                        <echo message="Profile: profile-three"/>
-                                        <touch file="${project.build.directory}/touch-fileprofile-three"/>
+                                        <echo message="Profile: profile-item-three"/>
+                                        <touch file="${project.build.directory}/touch-fileprofile-item-three"/>
                                     </target>
                                 </configuration>
                                 <goals>
@@ -132,7 +131,7 @@
                         </goals>
                         <configuration>
                             <items>${test-items}</items>
-                            <profiles>${test-profiles}</profiles>
+                            <profiles>profile-@invocation.id@</profiles>
                         </configuration>
                     </execution>
                 </executions>
@@ -146,7 +145,7 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
                     <dependenciesToScan>
-                        <depedency>com.github.shiver-me-timbers:set-profiles-it</depedency>
+                        <depedency>com.github.shiver-me-timbers:set-profile-with-item-it</depedency>
                     </dependenciesToScan>
                 </configuration>
             </plugin>
@@ -177,7 +176,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.shiver-me-timbers</groupId>
-            <artifactId>set-profiles-it</artifactId>
+            <artifactId>set-profile-with-item-it</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

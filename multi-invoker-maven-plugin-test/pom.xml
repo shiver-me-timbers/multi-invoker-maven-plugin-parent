@@ -134,5 +134,8 @@
         <module>set-profiles-it</module>
         <module>set-profiles</module>
         <module>set-profiles-parent</module>
+        <module>set-profile-with-item-it</module>
+        <module>set-profile-with-item</module>
+        <module>set-profile-with-item-parent</module>
     </modules>
 </project>
