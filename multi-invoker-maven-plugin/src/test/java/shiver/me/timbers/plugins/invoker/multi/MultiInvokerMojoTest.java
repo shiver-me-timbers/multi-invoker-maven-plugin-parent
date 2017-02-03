@@ -214,14 +214,21 @@ public class MultiInvokerMojoTest {
     }
 
     @Test
-    public void Can_get_configured_profiles()
+    public void Can_configured_the_profiles_that_will_run_with_each_invocation()
         throws MojoFailureException, MojoExecutionException, MavenInvocationException {
+
+        final String profile1 = someAlphanumericString();
+        final String profile2 = someAlphanumericString();
+        final String profile3 = someAlphanumericString();
+
+        // Given
+        mojo.withProfiles(format("%s,%s,%s", profile1, profile2, profile3));
 
         // When
         final List<String> actual = mojo.getProfiles();
 
         // Then
-        assertThat(actual, is(empty()));
+        assertThat(actual, contains(profile1, profile2, profile3));
     }
 
     @Test

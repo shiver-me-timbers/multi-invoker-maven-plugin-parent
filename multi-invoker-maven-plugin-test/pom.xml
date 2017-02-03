@@ -131,5 +131,8 @@
         <module>once-for-each-profile-it</module>
         <module>once-for-each-profile</module>
         <module>once-for-each-profile-parent</module>
+        <module>set-profiles-it</module>
+        <module>set-profiles</module>
+        <module>set-profiles-parent</module>
     </modules>
 </project>

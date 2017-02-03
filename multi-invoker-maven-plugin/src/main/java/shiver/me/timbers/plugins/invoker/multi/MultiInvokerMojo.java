@@ -49,6 +49,9 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
     @Parameter
     private String items;
 
+    @Parameter
+    private String profiles;
+
     /**
      * All Maven plugins must have a default constructor.
      */
@@ -105,15 +108,17 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
 
     @Override
     public List<String> getProfiles() {
-        return new ArrayList<>();
+        return splitByCommas(profiles);
+    }
+
+    MultiInvokerMojo withProfiles(String profiles) {
+        this.profiles = profiles;
+        return this;
     }
 
     @Override
     public List<String> getItems() {
-        if (items == null || items.isEmpty()) {
-            return new ArrayList<>();
-        }
-        return asList(items.split(","));
+        return splitByCommas(items);
     }
 
     MultiInvokerMojo withItems(String items) {
@@ -128,5 +133,12 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
             return invocationId != null && !invocationId.isEmpty();
         }
         return false;
+    }
+
+    private static List<String> splitByCommas(String string) {
+        if (string == null || string.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return asList(string.split(","));
     }
 }
