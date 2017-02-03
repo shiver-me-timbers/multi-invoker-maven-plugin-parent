@@ -72,7 +72,7 @@ public class DefaultInvocationRequestsFactoryTest {
     }
 
     @Test
-    public void Can_create_an_invocation_request_for_each_configured_item() {
+    public void Can_create_an_invocation_request_for_each_configured_invocation() {
 
         final MavenProject project = mock(MavenProject.class);
         final MavenSession session = mock(MavenSession.class);
@@ -90,7 +90,7 @@ public class DefaultInvocationRequestsFactoryTest {
 
         // Given
         given(configuration.isForEachProfile()).willReturn(false);
-        given(configuration.getItems()).willReturn(asList(item1, item2, item3));
+        given(configuration.getInvocations()).willReturn(asList(item1, item2, item3));
         given(configurationFactory.forItem(configuration, item1)).willReturn(configuration1);
         given(configurationFactory.forItem(configuration, item2)).willReturn(configuration2);
         given(configurationFactory.forItem(configuration, item3)).willReturn(configuration3);

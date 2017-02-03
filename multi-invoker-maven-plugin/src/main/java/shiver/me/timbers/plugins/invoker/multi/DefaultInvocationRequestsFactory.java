@@ -69,7 +69,7 @@ class DefaultInvocationRequestsFactory implements InvocationRequestsFactory {
         MultiInvokerConfiguration configuration
     ) {
         final List<InvocationRequest> requests = new ArrayList<>();
-        for (String item : configuration.getItems()) {
+        for (String item : configuration.getInvocations()) {
             requests.add(
                 requestFactory.create(
                     project,

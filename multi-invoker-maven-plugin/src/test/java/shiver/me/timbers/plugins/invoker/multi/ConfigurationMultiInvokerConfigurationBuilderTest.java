@@ -76,7 +76,7 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
         // Given
         given(configuration.getLog()).willReturn(log);
         given(configuration.getInvocationId()).willReturn(invocationId);
-        given(configuration.getItems()).willReturn(items);
+        given(configuration.getInvocations()).willReturn(items);
         given(configuration.isForEachProfile()).willReturn(forEachProfile);
         given(configuration.getProfiles()).willReturn(profiles);
 
@@ -88,7 +88,7 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
         assertThat(actual.getLog(), is(log));
         assertThat(actual.getInvocationId(), is(invocationId));
         assertThat(actual.isForEachProfile(), is(forEachProfile));
-        assertThat(actual.getItems(), equalTo(items));
+        assertThat(actual.getInvocations(), equalTo(items));
         assertThat(actual.getProfiles(), equalTo(profiles));
     }
 }

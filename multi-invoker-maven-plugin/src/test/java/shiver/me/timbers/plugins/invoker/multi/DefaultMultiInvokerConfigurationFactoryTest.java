@@ -49,7 +49,7 @@ public class DefaultMultiInvokerConfigurationFactoryTest {
         // Given
         given(configuration.getLog()).willReturn(log);
         given(configuration.isForEachProfile()).willReturn(forEachProfile);
-        given(configuration.getItems()).willReturn(items);
+        given(configuration.getInvocations()).willReturn(items);
         given(configuration.getProfiles()).willReturn(profiles);
 
         // When
@@ -58,7 +58,7 @@ public class DefaultMultiInvokerConfigurationFactoryTest {
         // Then
         assertThat(actual.getLog(), is(log));
         assertThat(actual.isForEachProfile(), is(forEachProfile));
-        assertThat(actual.getItems(), allOf(not(sameInstance(items)), equalTo(items)));
+        assertThat(actual.getInvocations(), allOf(not(sameInstance(items)), equalTo(items)));
         assertThat(actual.getProfiles(), allOf(not(sameInstance(profiles)), equalTo(profiles)));
     }
 
@@ -93,7 +93,7 @@ public class DefaultMultiInvokerConfigurationFactoryTest {
     }
 
     @Test
-    public void Can_create_an_invocation_request_for_each_configured_item() {
+    public void Can_create_an_invocation_request_for_each_configured_invocation() {
 
         final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
         final String item = someString();

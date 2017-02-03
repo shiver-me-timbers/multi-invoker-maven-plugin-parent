@@ -24,19 +24,16 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>set-profiles-parent</artifactId>
-
-    <packaging>pom</packaging>
+    <artifactId>once-for-each-invocation</artifactId>
 
     <name>${project.artifactId}</name>
 
     <description>
-        This is the parent pom contains the multi-invoker-maven-plugin so that it can be tested from a child module.
+        This pom test that the multi-invoker-maven-plugin can run the current project once for each configured item.
     </description>
 
     <properties>
-        <test-invocations/>
-        <test-profiles/>
+        <test-invocations>invocation-one,invocation-two,invocation-three</test-invocations>
     </properties>
 
     <build>
@@ -53,10 +50,22 @@
                         </goals>
                         <configuration>
                             <invocations>${test-invocations}</invocations>
-                            <profiles>${test-profiles}</profiles>
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <dependenciesToScan>
+                        <depedency>com.github.shiver-me-timbers:once-for-each-invocation-it</depedency>
+                    </dependenciesToScan>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -78,9 +87,15 @@
                 </executions>
             </plugin>
         </plugins>
+
+        <directory>${project.basedir}/target/${invocation.id}</directory>
     </build>
 
-    <modules>
-        <module>set-profiles-from-parent</module>
-    </modules>
+    <dependencies>
+        <dependency>
+            <groupId>com.github.shiver-me-timbers</groupId>
+            <artifactId>once-for-each-invocation-it</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

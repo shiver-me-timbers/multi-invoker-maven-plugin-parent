@@ -64,7 +64,7 @@ public class MultiInvokerMojoTest {
     }
 
     @Test
-    public void Can_invoke_the_current_project_multiple_times()
+    public void Can_invoke_the_current_project_multiple_invocation()
         throws MojoFailureException, MojoExecutionException, MavenInvocationException {
 
         final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
@@ -232,7 +232,7 @@ public class MultiInvokerMojoTest {
     }
 
     @Test
-    public void Can_set_the_invocations_to_run_for_each_configured_item()
+    public void Can_set_the_invocations_to_run_for_each_configured_invocation()
         throws MojoFailureException, MojoExecutionException, MavenInvocationException {
 
         final String item1 = someAlphanumericString();
@@ -240,10 +240,10 @@ public class MultiInvokerMojoTest {
         final String item3 = someAlphanumericString();
 
         // Given
-        mojo.withItems(format("%s,%s,%s", item1, item2, item3));
+        mojo.withInvocations(format("%s,%s,%s", item1, item2, item3));
 
         // When
-        final List<String> actual = mojo.getItems();
+        final List<String> actual = mojo.getInvocations();
 
         // Then
         assertThat(actual, contains(item1, item2, item3));
@@ -254,10 +254,10 @@ public class MultiInvokerMojoTest {
         throws MojoFailureException, MojoExecutionException, MavenInvocationException {
 
         // Given
-        mojo.withItems("");
+        mojo.withInvocations("");
 
         // When
-        final List<String> actual = mojo.getItems();
+        final List<String> actual = mojo.getInvocations();
 
         // Then
         assertThat(actual, empty());
@@ -268,10 +268,10 @@ public class MultiInvokerMojoTest {
         throws MojoFailureException, MojoExecutionException, MavenInvocationException {
 
         // Given
-        mojo.withItems(null);
+        mojo.withInvocations(null);
 
         // When
-        final List<String> actual = mojo.getItems();
+        final List<String> actual = mojo.getInvocations();
 
         // Then
         assertThat(actual, empty());

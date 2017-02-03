@@ -44,7 +44,7 @@ public class DefaultMultiInvokerConfigurationReplacerTest {
         given(configurationFactory.copy(configuration)).willReturn(configurationCopy);
         given(configurationCopy.getLog()).willReturn(log);
         given(configurationCopy.getInvocationId()).willReturn(invocationid);
-        given(configurationCopy.getItems()).willReturn(items);
+        given(configurationCopy.getInvocations()).willReturn(items);
         given(configurationCopy.getProfiles()).willReturn(asList(profile1, profile2, profile3));
         given(stringReplacer.replace(profile1, "@invocation.id@", invocationid)).willReturn(replacedProfile1);
         given(stringReplacer.replace(profile2, "@invocation.id@", invocationid)).willReturn(replacedProfile2);
@@ -59,7 +59,7 @@ public class DefaultMultiInvokerConfigurationReplacerTest {
         // Then
         assertThat(actual.getLog(), is(log));
         assertThat(actual.getInvocationId(), is(invocationid));
-        assertThat(actual.getItems(), is(items));
+        assertThat(actual.getInvocations(), is(items));
         assertThat(actual.getProfiles(), contains(replacedProfile1, replacedProfile2, replacedProfile3));
     }
 }

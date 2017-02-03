@@ -31,7 +31,7 @@
     <description>This pom tests to see if the multi-invoker-maven-plugin can be used from a parent pom.</description>
 
     <properties>
-        <test-items>item-one,item-two,item-three</test-items>
+        <test-invocations>invocation-one,invocation-two,invocation-three</test-invocations>
         <test-profiles>profile-one,profile-two,profile-three</test-profiles>
     </properties>
 

@@ -51,8 +51,8 @@ class DefaultMultiInvokerConfigurationReplacer implements MultiInvokerConfigurat
             }
 
             @Override
-            public List<String> getItems() {
-                return copy.getItems();
+            public List<String> getInvocations() {
+                return copy.getInvocations();
             }
 
             @Override

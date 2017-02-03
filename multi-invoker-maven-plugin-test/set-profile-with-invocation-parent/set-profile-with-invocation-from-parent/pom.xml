@@ -20,26 +20,23 @@
 
     <parent>
         <groupId>com.github.shiver-me-timbers</groupId>
-        <artifactId>multi-invoker-maven-plugin-test</artifactId>
+        <artifactId>set-profile-with-invocation-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>set-profiles</artifactId>
+    <artifactId>set-profile-with-invocation-from-parent</artifactId>
 
     <name>${project.artifactId}</name>
 
-    <description>
-        This pom test that custom profiles can be set for every multi-invoker-maven-plugin invocation.
-    </description>
+    <description>This pom tests to see if the multi-invoker-maven-plugin can be used from a parent pom.</description>
 
     <properties>
         <test-invocations>invocation-one,invocation-two,invocation-three</test-invocations>
-        <test-profiles>profile-one,profile-two,profile-three</test-profiles>
     </properties>
 
     <profiles>
         <profile>
-            <id>profile-one</id>
+            <id>profile-invocation-one</id>
             <build>
                 <plugins>
                     <plugin>
@@ -47,12 +44,12 @@
                         <artifactId>maven-antrun-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>profile-one</id>
+                                <id>profile-invocation-one</id>
                                 <phase>generate-resources</phase>
                                 <configuration>
                                     <target>
-                                        <echo message="Profile: profile-one"/>
-                                        <touch file="${project.build.directory}/touch-fileprofile-one"/>
+                                        <echo message="Profile: profile-invocation-one"/>
+                                        <touch file="${project.build.directory}/touch-fileprofile-invocation-one"/>
                                     </target>
                                 </configuration>
                                 <goals>
@@ -65,7 +62,7 @@
             </build>
         </profile>
         <profile>
-            <id>profile-two</id>
+            <id>profile-invocation-two</id>
             <build>
                 <plugins>
                     <plugin>
@@ -73,12 +70,12 @@
                         <artifactId>maven-antrun-plugin</artifactId>
                         <executions>
                             <execution>
-                                <id>profile-two</id>
+                                <id>profile-invocation-two</id>
                                 <phase>generate-resources</phase>
                                 <configuration>
                                     <target>
-                                        <echo message="Profile: profile-two"/>
-                                        <touch file="${project.build.directory}/touch-fileprofile-two"/>
+                                        <echo message="Profile: profile-invocation-two"/>
+                                        <touch file="${project.build.directory}/touch-fileprofile-invocation-two"/>
                                     </target>
                                 </configuration>
                                 <goals>
@@ -91,7 +88,7 @@
             </build>
         </profile>
         <profile>
-            <id>profile-three</id>
+            <id>profile-invocation-three</id>
             <build>
                 <plugins>
                     <plugin>
@@ -103,8 +100,8 @@
                                 <phase>generate-resources</phase>
                                 <configuration>
                                     <target>
-                                        <echo message="Profile: profile-three"/>
-                                        <touch file="${project.build.directory}/touch-fileprofile-three"/>
+                                        <echo message="Profile: profile-invocation-three"/>
+                                        <touch file="${project.build.directory}/touch-fileprofile-invocation-three"/>
                                     </target>
                                 </configuration>
                                 <goals>
@@ -121,23 +118,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>com.github.shiver-me-timbers</groupId>
-                <artifactId>multi-invoker-maven-plugin</artifactId>
-                <version>1.0-SNAPSHOT</version>
-                <executions>
-                    <execution>
-                        <id>multi-invoker</id>
-                        <goals>
-                            <goal>invoker</goal>
-                        </goals>
-                        <configuration>
-                            <invocations>${test-invocations}</invocations>
-                            <profiles>${test-profiles}</profiles>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
             </plugin>
@@ -146,28 +126,9 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
                     <dependenciesToScan>
-                        <depedency>com.github.shiver-me-timbers:set-profiles-it</depedency>
+                        <depedency>com.github.shiver-me-timbers:set-profile-with-invocation-it</depedency>
                     </dependenciesToScan>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>2.5.2</version>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.0.2</version>
-                <executions>
-                    <execution>
-                        <id>default-jar</id>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
 
@@ -177,7 +138,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.shiver-me-timbers</groupId>
-            <artifactId>set-profiles-it</artifactId>
+            <artifactId>set-profile-with-invocation-it</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

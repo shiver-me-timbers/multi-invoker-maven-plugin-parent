@@ -15,7 +15,7 @@ interface MultiInvokerConfiguration {
 
     boolean isForEachProfile();
 
-    List<String> getItems();
+    List<String> getInvocations();
 
     List<String> getProfiles();
 }

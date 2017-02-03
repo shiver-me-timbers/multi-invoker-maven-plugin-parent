@@ -47,7 +47,7 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
     private boolean forEachProfile;
 
     @Parameter
-    private String items;
+    private String invocations;
 
     @Parameter
     private String profiles;
@@ -117,12 +117,12 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
     }
 
     @Override
-    public List<String> getItems() {
-        return splitByCommas(items);
+    public List<String> getInvocations() {
+        return splitByCommas(invocations);
     }
 
-    MultiInvokerMojo withItems(String items) {
-        this.items = items;
+    MultiInvokerMojo withInvocations(String invocations) {
+        this.invocations = invocations;
         return this;
     }
 

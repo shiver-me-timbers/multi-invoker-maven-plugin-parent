@@ -16,7 +16,7 @@ import static org.junit.Assert.assertThat;
 public class ITMultiInvokerMojo {
 
     @Test
-    public void Can_set_the_profiles_to_user_for_each_invocation() throws Exception {
+    public void Can_invoke_a_maven_project_once_for_each_configured_invocation() throws Exception {
 
         // Given
         final MavenXpp3Reader reader = new MavenXpp3Reader();
@@ -24,7 +24,6 @@ public class ITMultiInvokerMojo {
 
         // When
         final String[] items = model.getProperties().getProperty("test-invocations").split(",");
-        final String[] profiles = model.getProperties().getProperty("test-profiles").split(",");
 
         // Then
         assertThat(items, not(emptyArray()));
@@ -32,9 +31,6 @@ public class ITMultiInvokerMojo {
             final File profileDir = new File(new File("target"), item);
             assertThat(profileDir, anExistingDirectory());
             assertThat(new File(profileDir, "touch-file" + item), anExistingFile());
-            for (String profile : profiles) {
-                assertThat(new File(profileDir, "touch-file" + profile), anExistingFile());
-            }
         }
     }
 }

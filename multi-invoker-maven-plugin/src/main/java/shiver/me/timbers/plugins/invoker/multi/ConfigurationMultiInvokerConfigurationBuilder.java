@@ -18,7 +18,7 @@ class ConfigurationMultiInvokerConfigurationBuilder implements MultiInvokerConfi
 
     ConfigurationMultiInvokerConfigurationBuilder(MultiInvokerConfiguration configuration) {
         forEachProfile = configuration.isForEachProfile();
-        items = new ArrayList<>(configuration.getItems());
+        items = new ArrayList<>(configuration.getInvocations());
         profiles = new ArrayList<>(configuration.getProfiles());
         invocationId = configuration.getInvocationId();
         log = configuration.getLog();
@@ -55,7 +55,7 @@ class ConfigurationMultiInvokerConfigurationBuilder implements MultiInvokerConfi
             }
 
             @Override
-            public List<String> getItems() {
+            public List<String> getInvocations() {
                 return items;
             }
 

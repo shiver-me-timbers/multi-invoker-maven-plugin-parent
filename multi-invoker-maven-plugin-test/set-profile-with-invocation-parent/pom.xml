@@ -24,7 +24,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>set-profiles-parent</artifactId>
+    <artifactId>set-profile-with-invocation-parent</artifactId>
 
     <packaging>pom</packaging>
 
@@ -36,7 +36,6 @@
 
     <properties>
         <test-invocations/>
-        <test-profiles/>
     </properties>
 
     <build>
@@ -53,7 +52,7 @@
                         </goals>
                         <configuration>
                             <invocations>${test-invocations}</invocations>
-                            <profiles>${test-profiles}</profiles>
+                            <profiles>profile-@invocation.id@</profiles>
                         </configuration>
                     </execution>
                 </executions>
@@ -81,6 +80,6 @@
     </build>
 
     <modules>
-        <module>set-profiles-from-parent</module>
+        <module>set-profile-with-invocation-from-parent</module>
     </modules>
 </project>
