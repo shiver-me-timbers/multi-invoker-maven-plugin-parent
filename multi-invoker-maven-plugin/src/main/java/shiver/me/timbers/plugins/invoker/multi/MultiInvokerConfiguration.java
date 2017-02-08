@@ -18,4 +18,6 @@ interface MultiInvokerConfiguration {
     List<String> getInvocations();
 
     List<String> getProfiles();
+
+    List<String> getGoals();
 }

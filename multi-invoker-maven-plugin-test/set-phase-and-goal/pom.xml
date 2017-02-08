@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2015 Karl Bennett
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.github.shiver-me-timbers</groupId>
+        <artifactId>multi-invoker-maven-plugin-test</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>set-phase-and-goal</artifactId>
+
+    <name>${project.artifactId}</name>
+
+    <description>
+        This pom tests that the multi-invoker-maven-plugin be configured to run the current module with a specific phase
+        and goal.
+    </description>
+
+    <properties>
+        <test-invocation>invoke-once</test-invocation>
+    </properties>
+
+    <profiles>
+        <profile>
+            <id>enforce-phase</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-enforcer-plugin</artifactId>
+                        <version>1.4.1</version>
+                        <executions>
+                            <execution>
+                                <id>enforce-versions</id>
+                                <!--If we get to this phase then we should fail.-->
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>enforce</goal>
+                                </goals>
+                                <configuration>
+                                    <rules>
+                                        <AlwaysFail/>
+                                    </rules>
+                                    <fail>true</fail>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.github.shiver-me-timbers</groupId>
+                <artifactId>multi-invoker-maven-plugin</artifactId>
+                <version>1.0-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <id>multi-invoker</id>
+                        <goals>
+                            <goal>invoker</goal>
+                        </goals>
+                        <configuration>
+                            <invocations>invoke-once</invocations>
+                            <profiles>enforce-phase</profiles>
+                            <goals>clean generate-sources antrun:run</goals>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <configuration>
+                    <target>
+                        <echo message="Invocation Id: ${invocation.id}"/>
+                        <touch file="${project.build.directory}/touch-file${invocation.id}"/>
+                    </target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <dependenciesToScan>
+                        <depedency>com.github.shiver-me-timbers:set-phase-and-goal-it</depedency>
+                    </dependenciesToScan>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.5.2</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>default-jar</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <directory>${project.basedir}/target/${invocation.id}</directory>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.shiver-me-timbers</groupId>
+            <artifactId>set-phase-and-goal-it</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>

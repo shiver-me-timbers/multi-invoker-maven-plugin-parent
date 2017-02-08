@@ -33,7 +33,9 @@ class DefaultMultiInvokerConfigurationReplacer implements MultiInvokerConfigurat
     @Override
     public MultiInvokerConfiguration resolveSubstitutions(MultiInvokerConfiguration configuration) {
         final MultiInvokerConfiguration copy = configurationFactory.copy(configuration);
-        final List<String> replacedProfiles = replace(copy.getProfiles(), copy.getInvocationId());
+        final String invocationId = copy.getInvocationId();
+        final List<String> replacedProfiles = replace(copy.getProfiles(), invocationId);
+        final List<String> replacedGoals = replace(copy.getGoals(), invocationId);
         return new MultiInvokerConfiguration() {
             @Override
             public Log getLog() {
@@ -42,7 +44,7 @@ class DefaultMultiInvokerConfigurationReplacer implements MultiInvokerConfigurat
 
             @Override
             public String getInvocationId() {
-                return copy.getInvocationId();
+                return invocationId;
             }
 
             @Override
@@ -58,6 +60,11 @@ class DefaultMultiInvokerConfigurationReplacer implements MultiInvokerConfigurat
             @Override
             public List<String> getProfiles() {
                 return replacedProfiles;
+            }
+
+            @Override
+            public List<String> getGoals() {
+                return replacedGoals;
             }
         };
     }

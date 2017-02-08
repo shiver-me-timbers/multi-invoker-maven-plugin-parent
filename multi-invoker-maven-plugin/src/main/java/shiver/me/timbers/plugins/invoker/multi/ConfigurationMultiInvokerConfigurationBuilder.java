@@ -15,6 +15,7 @@ class ConfigurationMultiInvokerConfigurationBuilder implements MultiInvokerConfi
     private final List<String> profiles;
     private String invocationId;
     private final Log log;
+    private final List<String> goals;
 
     ConfigurationMultiInvokerConfigurationBuilder(MultiInvokerConfiguration configuration) {
         forEachProfile = configuration.isForEachProfile();
@@ -22,6 +23,7 @@ class ConfigurationMultiInvokerConfigurationBuilder implements MultiInvokerConfi
         profiles = new ArrayList<>(configuration.getProfiles());
         invocationId = configuration.getInvocationId();
         log = configuration.getLog();
+        goals = new ArrayList<>(configuration.getGoals());
     }
 
     @Override
@@ -62,6 +64,11 @@ class ConfigurationMultiInvokerConfigurationBuilder implements MultiInvokerConfi
             @Override
             public List<String> getProfiles() {
                 return profiles;
+            }
+
+            @Override
+            public List<String> getGoals() {
+                return goals;
             }
         });
     }

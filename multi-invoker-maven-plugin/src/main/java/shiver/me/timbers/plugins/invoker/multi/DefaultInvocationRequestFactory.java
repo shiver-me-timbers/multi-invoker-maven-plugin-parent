@@ -7,6 +7,7 @@ import org.apache.maven.shared.invoker.InvocationRequest;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
 
+import java.util.List;
 import java.util.Properties;
 
 import static shiver.me.timbers.plugins.invoker.multi.MultiInvokerMojo.INVOCATION_ID;
@@ -47,7 +48,7 @@ class DefaultInvocationRequestFactory implements InvocationRequestFactory {
         request.setProfiles(replacedConfiguration.getProfiles());
         request.setBaseDirectory(project.getBasedir());
         request.setPomFile(project.getFile());
-        request.setGoals(session.getGoals());
+        request.setGoals(chooseGoals(replacedConfiguration, session));
         request.setProperties(configureProperties(session, replacedConfiguration));
         return request;
     }
@@ -59,5 +60,13 @@ class DefaultInvocationRequestFactory implements InvocationRequestFactory {
         );
         properties.setProperty(INVOCATION_ID, configuration.getInvocationId());
         return properties;
+    }
+
+    private static List<String> chooseGoals(MultiInvokerConfiguration configuration, MavenSession session) {
+        final List<String> goals = configuration.getGoals();
+        if (goals != null && !goals.isEmpty()) {
+            return goals;
+        }
+        return session.getGoals();
     }
 }

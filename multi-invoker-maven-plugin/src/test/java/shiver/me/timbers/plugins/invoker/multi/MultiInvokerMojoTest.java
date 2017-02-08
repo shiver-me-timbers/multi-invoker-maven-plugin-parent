@@ -1,6 +1,7 @@
 package shiver.me.timbers.plugins.invoker.multi;
 
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
@@ -8,6 +9,7 @@ import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
+import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.junit.Before;
 import org.junit.Rule;
@@ -20,6 +22,7 @@ import java.util.Properties;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
+import static org.codehaus.plexus.logging.Logger.LEVEL_ERROR;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
@@ -56,11 +59,36 @@ public class MultiInvokerMojoTest {
         requestsFactory = mock(InvocationRequestsFactory.class);
         invoker = mock(Invoker.class);
         mojo = new MultiInvokerMojo(project, session, configurationFactory, requestsFactory, invoker);
+        mojo.setLog(new DefaultLog(new ConsoleLogger(LEVEL_ERROR, getClass().getName())));
     }
 
     @Test
     public void Instantiation_for_coverage() {
         new MultiInvokerMojo();
+    }
+
+    @Test
+    public void Test_to_cover_logging_code()
+        throws MojoFailureException, MojoExecutionException, MavenInvocationException {
+
+        final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
+        final InvocationRequest request = mock(InvocationRequest.class);
+        final InvocationResult success = mock(InvocationResult.class);
+
+        // Given
+        given(configurationFactory.copy(mojo)).willReturn(configuration);
+        given(requestsFactory.create(project, session, configuration)).willReturn(singletonList(request));
+        given(request.getGoals()).willReturn(asList(someString(), someString()));
+        given(request.getProfiles()).willReturn(asList(someString(), someString()));
+        given(invoker.execute(request)).willReturn(success);
+        given(success.getExitCode()).willReturn(0);
+
+        // When
+        mojo.execute();
+
+        // Then
+        then(request).should().getGoals();
+        then(request).should().getProfiles();
     }
 
     @Test
@@ -232,7 +260,7 @@ public class MultiInvokerMojoTest {
     }
 
     @Test
-    public void Can_set_the_invocations_to_run_for_each_configured_invocation()
+    public void Can_run_for_each_configured_invocation()
         throws MojoFailureException, MojoExecutionException, MavenInvocationException {
 
         final String item1 = someAlphanumericString();
@@ -250,7 +278,7 @@ public class MultiInvokerMojoTest {
     }
 
     @Test
-    public void Can_leave_the_items_empty()
+    public void Can_leave_the_invocations_empty()
         throws MojoFailureException, MojoExecutionException, MavenInvocationException {
 
         // Given
@@ -264,7 +292,7 @@ public class MultiInvokerMojoTest {
     }
 
     @Test
-    public void Can_leave_the_items_blank()
+    public void Can_leave_the_invocations_blank()
         throws MojoFailureException, MojoExecutionException, MavenInvocationException {
 
         // Given
@@ -275,6 +303,24 @@ public class MultiInvokerMojoTest {
 
         // Then
         assertThat(actual, empty());
+    }
+
+    @Test
+    public void Can_set_the_goals_to_run_for_each_configured_invocation()
+        throws MojoFailureException, MojoExecutionException, MavenInvocationException {
+
+        final String goal1 = someAlphanumericString();
+        final String goal2 = someAlphanumericString();
+        final String goal3 = someAlphanumericString();
+
+        // Given
+        mojo.withGoals(format("%s,%s,%s", goal1, goal2, goal3));
+
+        // When
+        final List<String> actual = mojo.getGoals();
+
+        // Then
+        assertThat(actual, contains(goal1, goal2, goal3));
     }
 
     @Test

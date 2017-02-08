@@ -72,6 +72,7 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
         final Boolean forEachProfile = someBoolean();
         final List<String> items = asList(someString(), someString(), someString());
         final List<String> profiles = asList(someString(), someString(), someString());
+        final List<String> goals = asList(someString(), someString(), someString());
 
         // Given
         given(configuration.getLog()).willReturn(log);
@@ -79,6 +80,7 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
         given(configuration.getInvocations()).willReturn(items);
         given(configuration.isForEachProfile()).willReturn(forEachProfile);
         given(configuration.getProfiles()).willReturn(profiles);
+        given(configuration.getGoals()).willReturn(goals);
 
         // When
         final MultiInvokerConfiguration actual = new ConfigurationMultiInvokerConfigurationBuilder(configuration)
@@ -90,5 +92,6 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
         assertThat(actual.isForEachProfile(), is(forEachProfile));
         assertThat(actual.getInvocations(), equalTo(items));
         assertThat(actual.getProfiles(), equalTo(profiles));
+        assertThat(actual.getGoals(), equalTo(goals));
     }
 }

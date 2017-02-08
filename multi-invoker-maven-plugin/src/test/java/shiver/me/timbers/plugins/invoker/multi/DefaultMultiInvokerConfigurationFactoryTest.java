@@ -45,12 +45,14 @@ public class DefaultMultiInvokerConfigurationFactoryTest {
         final Boolean forEachProfile = someBoolean();
         final List<String> items = asList(someString(), someString(), someString());
         final List<String> profiles = asList(someString(), someString(), someString());
+        final List<String> goals = asList(someString(), someString(), someString());
 
         // Given
         given(configuration.getLog()).willReturn(log);
         given(configuration.isForEachProfile()).willReturn(forEachProfile);
         given(configuration.getInvocations()).willReturn(items);
         given(configuration.getProfiles()).willReturn(profiles);
+        given(configuration.getGoals()).willReturn(goals);
 
         // When
         final MultiInvokerConfiguration actual = factory.copy(configuration);
@@ -60,6 +62,7 @@ public class DefaultMultiInvokerConfigurationFactoryTest {
         assertThat(actual.isForEachProfile(), is(forEachProfile));
         assertThat(actual.getInvocations(), allOf(not(sameInstance(items)), equalTo(items)));
         assertThat(actual.getProfiles(), allOf(not(sameInstance(profiles)), equalTo(profiles)));
+        assertThat(actual.getGoals(), allOf(not(sameInstance(goals)), equalTo(goals)));
     }
 
     @Test
