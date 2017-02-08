@@ -128,14 +128,18 @@
         <module>once-for-each-invocation-it</module>
         <module>once-for-each-invocation</module>
         <module>once-for-each-invocation-parent</module>
+        <module>once-for-each-invocation-from-external-parent</module>
         <module>once-for-each-profile-it</module>
         <module>once-for-each-profile</module>
         <module>once-for-each-profile-parent</module>
+        <module>once-for-each-profile-from-external-parent</module>
         <module>set-profiles-it</module>
         <module>set-profiles</module>
         <module>set-profiles-parent</module>
+        <module>set-profiles-from-external-parent</module>
         <module>set-profile-with-invocation-it</module>
         <module>set-profile-with-invocation</module>
         <module>set-profile-with-invocation-parent</module>
+        <module>set-profile-with-invocation-from-external-parent</module>
     </modules>
 </project>
