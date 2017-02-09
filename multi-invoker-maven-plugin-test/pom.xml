@@ -143,5 +143,7 @@
         <module>set-profile-with-invocation-from-external-parent</module>
         <module>set-phase-and-goal-it</module>
         <module>set-phase-and-goal</module>
+        <module>set-phase-and-goal-parent</module>
+        <module>set-phase-and-goal-from-external-parent</module>
     </modules>
 </project>
