@@ -42,6 +42,9 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
     private InvocationRequestsFactory requestsFactory;
 
     @Component
+    private MavenStrings mvns;
+
+    @Component
     private Invoker invoker;
 
     @Parameter(defaultValue = "false")
@@ -67,12 +70,14 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
         MavenSession session,
         MultiInvokerConfigurationFactory configurationFactory,
         InvocationRequestsFactory requestsFactory,
+        MavenStrings mvns,
         Invoker invoker
     ) {
         this.project = project;
         this.session = session;
         this.configurationFactory = configurationFactory;
         this.requestsFactory = requestsFactory;
+        this.mvns = mvns;
         this.invoker = invoker;
     }
 
@@ -85,7 +90,7 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
             .create(project, session, configurationFactory.copy(this));
         for (InvocationRequest request : requests) {
             try {
-                getLog().info(format("Invoking: mvn %s %s", toGoals(request), toProfiles(request)));
+                getLog().info(format("Invoking: mvn %s %s", mvns.toGoals(request), mvns.toProfiles(request)));
                 final InvocationResult result = invoker.execute(request);
                 if (result.getExitCode() > 0) {
                     throw new MojoExecutionException("Multi invocation has failed.", result.getExecutionException());
@@ -139,31 +144,6 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
     MultiInvokerMojo withGoals(String goals) {
         this.goals = goals;
         return this;
-    }
-
-    private static String toGoals(InvocationRequest request) {
-        final List<String> goals = new ArrayList<>(request.getGoals());
-        if (goals.isEmpty()) {
-            return "";
-        }
-        final StringBuilder profilesString = new StringBuilder(goals.remove(0));
-        for (String goal : goals) {
-            profilesString.append(' ').append(goal);
-        }
-        return profilesString.toString();
-    }
-
-    private static String toProfiles(InvocationRequest request) {
-        final List<String> profiles = new ArrayList<>(request.getProfiles());
-        if (profiles.isEmpty()) {
-            return "";
-        }
-        final StringBuilder profilesString = new StringBuilder("-P");
-        profilesString.append(profiles.remove(0));
-        for (String profile : profiles) {
-            profilesString.append(',').append(profile);
-        }
-        return profilesString.toString();
     }
 
     private boolean isRunFromMultiInvocation() {

@@ -48,6 +48,7 @@ public class MultiInvokerMojoTest {
     private MavenSession session;
     private MultiInvokerConfigurationFactory configurationFactory;
     private InvocationRequestsFactory requestsFactory;
+    private MavenStrings mavenStrings;
     private Invoker invoker;
     private MultiInvokerMojo mojo;
 
@@ -57,8 +58,9 @@ public class MultiInvokerMojoTest {
         session = mock(MavenSession.class);
         configurationFactory = mock(MultiInvokerConfigurationFactory.class);
         requestsFactory = mock(InvocationRequestsFactory.class);
+        mavenStrings = mock(MavenStrings.class);
         invoker = mock(Invoker.class);
-        mojo = new MultiInvokerMojo(project, session, configurationFactory, requestsFactory, invoker);
+        mojo = new MultiInvokerMojo(project, session, configurationFactory, requestsFactory, mavenStrings, invoker);
         mojo.setLog(new DefaultLog(new ConsoleLogger(LEVEL_ERROR, getClass().getName())));
     }
 
@@ -68,18 +70,21 @@ public class MultiInvokerMojoTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void Test_to_cover_logging_code()
         throws MojoFailureException, MojoExecutionException, MavenInvocationException {
 
         final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
         final InvocationRequest request = mock(InvocationRequest.class);
         final InvocationResult success = mock(InvocationResult.class);
+        final List<String> goals = mock(List.class);
+        final List<String> profiles = mock(List.class);
 
         // Given
         given(configurationFactory.copy(mojo)).willReturn(configuration);
         given(requestsFactory.create(project, session, configuration)).willReturn(singletonList(request));
-        given(request.getGoals()).willReturn(asList(someString(), someString()));
-        given(request.getProfiles()).willReturn(asList(someString(), someString()));
+        given(request.getGoals()).willReturn(goals);
+        given(request.getProfiles()).willReturn(profiles);
         given(invoker.execute(request)).willReturn(success);
         given(success.getExitCode()).willReturn(0);
 
@@ -87,8 +92,8 @@ public class MultiInvokerMojoTest {
         mojo.execute();
 
         // Then
-        then(request).should().getGoals();
-        then(request).should().getProfiles();
+        then(mavenStrings).should().toGoals(request);
+        then(mavenStrings).should().toProfiles(request);
     }
 
     @Test

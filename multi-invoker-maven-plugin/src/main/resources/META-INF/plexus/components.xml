@@ -41,6 +41,14 @@
             <isolated-realm>false</isolated-realm>
         </component>
         <component>
+            <role>shiver.me.timbers.plugins.invoker.multi.MavenStrings</role>
+            <role-hint>default</role-hint>
+            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultMavenStrings
+            </implementation>
+            <description/>
+            <isolated-realm>false</isolated-realm>
+        </component>
+        <component>
             <role>shiver.me.timbers.plugins.invoker.multi.MultiInvokerConfigurationBuilderFactory</role>
             <role-hint>default</role-hint>
             <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultMultiInvokerConfigurationBuilderFactory
