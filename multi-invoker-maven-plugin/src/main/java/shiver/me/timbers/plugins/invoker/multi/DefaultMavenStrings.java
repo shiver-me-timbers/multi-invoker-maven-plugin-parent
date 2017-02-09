@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author Karl Bennett
  */
-public class DefaultMavenStrings implements MavenStrings {
+class DefaultMavenStrings implements MavenStrings {
 
     @Override
     public String toGoals(InvocationRequest request) {
