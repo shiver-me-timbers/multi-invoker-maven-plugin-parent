@@ -3,6 +3,7 @@ package shiver.me.timbers.plugins.invoker.multi;
 import org.apache.maven.plugin.logging.Log;
 
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @author Karl Bennett
@@ -20,4 +21,6 @@ interface MultiInvokerConfiguration {
     List<String> getProfiles();
 
     List<String> getGoals();
+
+    Properties getProperties();
 }

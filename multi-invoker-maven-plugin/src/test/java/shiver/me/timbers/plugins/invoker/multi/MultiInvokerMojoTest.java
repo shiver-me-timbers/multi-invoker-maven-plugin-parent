@@ -26,6 +26,7 @@ import static org.codehaus.plexus.logging.Logger.LEVEL_ERROR;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
@@ -326,6 +327,36 @@ public class MultiInvokerMojoTest {
 
         // Then
         assertThat(actual, contains(goal1, goal2, goal3));
+    }
+
+    @Test
+    public void Can_set_extra_properties_for_each_configured_invocation()
+        throws MojoFailureException, MojoExecutionException, MavenInvocationException {
+
+        final Properties properties = mock(Properties.class);
+
+        // Given
+        mojo.withProperties(properties);
+
+        // When
+        final Properties actual = mojo.getProperties();
+
+        // Then
+        assertThat(actual, is(properties));
+    }
+
+    @Test
+    public void Can_get_empty_properties()
+        throws MojoFailureException, MojoExecutionException, MavenInvocationException {
+
+        // Given
+        mojo.withProperties(null);
+
+        // When
+        final Properties actual = mojo.getProperties();
+
+        // Then
+        assertThat(actual, equalTo(new Properties()));
     }
 
     @Test

@@ -4,6 +4,7 @@ import org.apache.maven.plugin.logging.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @author Karl Bennett
@@ -16,6 +17,7 @@ class ImmutableMultiInvokerConfiguration implements MultiInvokerConfiguration {
     private final Log log;
     private final List<String> items;
     private final List<String> goals;
+    private final Properties properties;
 
     ImmutableMultiInvokerConfiguration(MultiInvokerConfiguration configuration) {
         forEachProfile = configuration.isForEachProfile();
@@ -24,6 +26,8 @@ class ImmutableMultiInvokerConfiguration implements MultiInvokerConfiguration {
         invocationId = configuration.getInvocationId();
         log = configuration.getLog();
         goals = new ArrayList<>(configuration.getGoals());
+        properties = new Properties();
+        properties.putAll(configuration.getProperties());
     }
 
     @Override
@@ -54,5 +58,10 @@ class ImmutableMultiInvokerConfiguration implements MultiInvokerConfiguration {
     @Override
     public List<String> getGoals() {
         return goals;
+    }
+
+    @Override
+    public Properties getProperties() {
+        return properties;
     }
 }

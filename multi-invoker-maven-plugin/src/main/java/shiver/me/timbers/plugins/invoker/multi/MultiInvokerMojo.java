@@ -59,6 +59,9 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
     @Parameter
     private String goals;
 
+    @Parameter
+    private Properties properties;
+
     /**
      * All Maven plugins must have a default constructor.
      */
@@ -143,6 +146,16 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
 
     MultiInvokerMojo withGoals(String goals) {
         this.goals = goals;
+        return this;
+    }
+
+    @Override
+    public Properties getProperties() {
+        return properties == null ? new Properties() : properties;
+    }
+
+    MultiInvokerMojo withProperties(Properties properties) {
+        this.properties = properties;
         return this;
     }
 

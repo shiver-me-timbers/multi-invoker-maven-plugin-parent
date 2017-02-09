@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
@@ -14,6 +15,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static shiver.me.timbers.data.random.RandomBooleans.someBoolean;
+import static shiver.me.timbers.data.random.RandomStrings.someAlphanumericString;
 import static shiver.me.timbers.data.random.RandomStrings.someString;
 import static shiver.me.timbers.matchers.Matchers.hasField;
 
@@ -29,8 +31,10 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
     @Test
     public void Can_add_an_invocation_id_to_the_builder() {
 
-        // Given
         final String invocationId = someString();
+
+        // Given
+        given(configuration.getProperties()).willReturn(new Properties());
 
         // When
         final ConfigurationMultiInvokerConfigurationBuilder builder =
@@ -52,6 +56,7 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
 
         // Given
         given(configuration.getProfiles()).willReturn(profiles);
+        given(configuration.getProperties()).willReturn(new Properties());
         updatedProfiles.add(profile);
 
         // When
@@ -73,6 +78,7 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
         final List<String> items = asList(someString(), someString(), someString());
         final List<String> profiles = asList(someString(), someString(), someString());
         final List<String> goals = asList(someString(), someString(), someString());
+        final Properties properties = new Properties();
 
         // Given
         given(configuration.getLog()).willReturn(log);
@@ -81,6 +87,10 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
         given(configuration.isForEachProfile()).willReturn(forEachProfile);
         given(configuration.getProfiles()).willReturn(profiles);
         given(configuration.getGoals()).willReturn(goals);
+        given(configuration.getProperties()).willReturn(properties);
+        properties.setProperty(someAlphanumericString(3), someAlphanumericString(5));
+        properties.setProperty(someAlphanumericString(8), someAlphanumericString(13));
+        properties.setProperty(someAlphanumericString(21), someAlphanumericString(34));
 
         // When
         final MultiInvokerConfiguration actual = new ConfigurationMultiInvokerConfigurationBuilder(configuration)
@@ -93,5 +103,6 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
         assertThat(actual.getInvocations(), equalTo(items));
         assertThat(actual.getProfiles(), equalTo(profiles));
         assertThat(actual.getGoals(), equalTo(goals));
+        assertThat(actual.getProperties(), equalTo(properties));
     }
 }

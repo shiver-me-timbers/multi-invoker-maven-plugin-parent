@@ -6,6 +6,7 @@ import org.codehaus.plexus.component.annotations.Requirement;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @author Karl Bennett
@@ -65,6 +66,11 @@ class DefaultMultiInvokerConfigurationReplacer implements MultiInvokerConfigurat
             @Override
             public List<String> getGoals() {
                 return replacedGoals;
+            }
+
+            @Override
+            public Properties getProperties() {
+                return copy.getProperties();
             }
         };
     }

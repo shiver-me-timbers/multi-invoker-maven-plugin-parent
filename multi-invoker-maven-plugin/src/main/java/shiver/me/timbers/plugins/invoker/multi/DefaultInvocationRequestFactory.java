@@ -55,6 +55,7 @@ class DefaultInvocationRequestFactory implements InvocationRequestFactory {
 
     private Properties configureProperties(MavenSession session, MultiInvokerConfiguration configuration) {
         final Properties properties = propertiesAppender.append(
+            configuration.getProperties(),
             session.getSystemProperties(),
             session.getUserProperties()
         );

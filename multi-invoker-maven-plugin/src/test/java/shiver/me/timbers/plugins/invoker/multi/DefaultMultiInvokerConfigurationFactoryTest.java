@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Properties;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.allOf;
@@ -17,6 +18,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static shiver.me.timbers.data.random.RandomBooleans.someBoolean;
+import static shiver.me.timbers.data.random.RandomStrings.someAlphanumericString;
 import static shiver.me.timbers.data.random.RandomStrings.someString;
 
 public class DefaultMultiInvokerConfigurationFactoryTest {
@@ -46,6 +48,7 @@ public class DefaultMultiInvokerConfigurationFactoryTest {
         final List<String> items = asList(someString(), someString(), someString());
         final List<String> profiles = asList(someString(), someString(), someString());
         final List<String> goals = asList(someString(), someString(), someString());
+        final Properties properties = new Properties();
 
         // Given
         given(configuration.getLog()).willReturn(log);
@@ -53,6 +56,10 @@ public class DefaultMultiInvokerConfigurationFactoryTest {
         given(configuration.getInvocations()).willReturn(items);
         given(configuration.getProfiles()).willReturn(profiles);
         given(configuration.getGoals()).willReturn(goals);
+        given(configuration.getProperties()).willReturn(properties);
+        properties.setProperty(someAlphanumericString(3), someAlphanumericString(5));
+        properties.setProperty(someAlphanumericString(8), someAlphanumericString(13));
+        properties.setProperty(someAlphanumericString(21), someAlphanumericString(34));
 
         // When
         final MultiInvokerConfiguration actual = factory.copy(configuration);
@@ -63,6 +70,7 @@ public class DefaultMultiInvokerConfigurationFactoryTest {
         assertThat(actual.getInvocations(), allOf(not(sameInstance(items)), equalTo(items)));
         assertThat(actual.getProfiles(), allOf(not(sameInstance(profiles)), equalTo(profiles)));
         assertThat(actual.getGoals(), allOf(not(sameInstance(goals)), equalTo(goals)));
+        assertThat(actual.getProperties(), allOf(not(sameInstance(properties)), equalTo(properties)));
     }
 
     @Test

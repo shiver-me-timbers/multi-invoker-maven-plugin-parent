@@ -145,5 +145,9 @@
         <module>set-phase-and-goal</module>
         <module>set-phase-and-goal-parent</module>
         <module>set-phase-and-goal-from-external-parent</module>
+        <module>set-properties-for-invocation-it</module>
+        <module>set-properties-for-invocation</module>
+        <module>set-properties-for-invocation-parent</module>
+        <module>set-properties-for-invocation-from-external-parent</module>
     </modules>
 </project>

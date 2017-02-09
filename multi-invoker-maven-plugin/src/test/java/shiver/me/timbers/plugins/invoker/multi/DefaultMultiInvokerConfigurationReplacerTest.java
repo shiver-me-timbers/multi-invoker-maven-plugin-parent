@@ -4,6 +4,7 @@ import org.apache.maven.plugin.logging.Log;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Properties;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.contains;
@@ -41,6 +42,7 @@ public class DefaultMultiInvokerConfigurationReplacerTest {
         final String goal1 = someString();
         final String goal2 = someString();
         final String goal3 = someString();
+        final Properties properties = mock(Properties.class);
         final String replacedProfile1 = someString();
         final String replacedProfile2 = someString();
         final String replacedProfile3 = someString();
@@ -56,6 +58,7 @@ public class DefaultMultiInvokerConfigurationReplacerTest {
         given(configurationCopy.getInvocations()).willReturn(items);
         given(configurationCopy.getProfiles()).willReturn(asList(profile1, profile2, profile3));
         given(configurationCopy.getGoals()).willReturn(asList(goal1, goal2, goal3));
+        given(configurationCopy.getProperties()).willReturn(properties);
         given(stringReplacer.replace(profile1, "@invocation.id@", invocationid)).willReturn(replacedProfile1);
         given(stringReplacer.replace(profile2, "@invocation.id@", invocationid)).willReturn(replacedProfile2);
         given(stringReplacer.replace(profile3, "@invocation.id@", invocationid)).willReturn(replacedProfile3);
@@ -76,5 +79,6 @@ public class DefaultMultiInvokerConfigurationReplacerTest {
         assertThat(actual.getInvocations(), is(items));
         assertThat(actual.getProfiles(), contains(replacedProfile1, replacedProfile2, replacedProfile3));
         assertThat(actual.getGoals(), contains(replacedGoal1, replacedGoal2, replacedGoal3));
+        assertThat(actual.getProperties(), is(properties));
     }
 }

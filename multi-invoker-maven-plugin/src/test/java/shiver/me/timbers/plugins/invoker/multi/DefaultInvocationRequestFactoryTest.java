@@ -58,8 +58,9 @@ public class DefaultInvocationRequestFactoryTest {
         final File baseDir = mock(File.class);
         final File pomFile = mock(File.class);
         final List<String> goals = mock(List.class);
-        final Properties systemProperties = new Properties();
-        final Properties userProperties = new Properties();
+        final Properties configuredProperties = mock(Properties.class);
+        final Properties systemProperties = mock(Properties.class);
+        final Properties userProperties = mock(Properties.class);
         final Properties properties = mock(Properties.class);
         final String invocationId = someString();
 
@@ -68,13 +69,14 @@ public class DefaultInvocationRequestFactoryTest {
         given(replacedConfiguration.getLog()).willReturn(log);
         given(replacedConfiguration.getProfiles()).willReturn(profiles);
         given(replacedConfiguration.getGoals()).willReturn(null);
+        given(replacedConfiguration.getProperties()).willReturn(configuredProperties);
         given(outputHandlerFactory.createFrom(log)).willReturn(outputHandler);
         given(project.getBasedir()).willReturn(baseDir);
         given(project.getFile()).willReturn(pomFile);
         given(session.getGoals()).willReturn(goals);
         given(session.getSystemProperties()).willReturn(systemProperties);
         given(session.getUserProperties()).willReturn(userProperties);
-        given(propertiesAppender.append(systemProperties, userProperties)).willReturn(properties);
+        given(propertiesAppender.append(configuredProperties, systemProperties, userProperties)).willReturn(properties);
         given(replacedConfiguration.getInvocationId()).willReturn(invocationId);
 
         // When
@@ -105,8 +107,9 @@ public class DefaultInvocationRequestFactoryTest {
         final InvocationOutputHandler outputHandler = mock(InvocationOutputHandler.class);
         final File baseDir = mock(File.class);
         final File pomFile = mock(File.class);
-        final Properties systemProperties = new Properties();
-        final Properties userProperties = new Properties();
+        final Properties configuredProperties = mock(Properties.class);
+        final Properties systemProperties = mock(Properties.class);
+        final Properties userProperties = mock(Properties.class);
         final Properties properties = mock(Properties.class);
         final String invocationId = someString();
 
@@ -115,12 +118,13 @@ public class DefaultInvocationRequestFactoryTest {
         given(replacedConfiguration.getLog()).willReturn(log);
         given(replacedConfiguration.getProfiles()).willReturn(profiles);
         given(replacedConfiguration.getGoals()).willReturn(goals);
+        given(replacedConfiguration.getProperties()).willReturn(configuredProperties);
         given(outputHandlerFactory.createFrom(log)).willReturn(outputHandler);
         given(project.getBasedir()).willReturn(baseDir);
         given(project.getFile()).willReturn(pomFile);
         given(session.getSystemProperties()).willReturn(systemProperties);
         given(session.getUserProperties()).willReturn(userProperties);
-        given(propertiesAppender.append(systemProperties, userProperties)).willReturn(properties);
+        given(propertiesAppender.append(configuredProperties, systemProperties, userProperties)).willReturn(properties);
         given(replacedConfiguration.getInvocationId()).willReturn(invocationId);
 
         // When
@@ -147,17 +151,19 @@ public class DefaultInvocationRequestFactoryTest {
 
         final MultiInvokerConfiguration replacedConfiguration = mock(MultiInvokerConfiguration.class);
         final List<String> goals = mock(List.class);
-        final Properties systemProperties = new Properties();
-        final Properties userProperties = new Properties();
+        final Properties configuredProperties = mock(Properties.class);
+        final Properties systemProperties = mock(Properties.class);
+        final Properties userProperties = mock(Properties.class);
         final Properties properties = mock(Properties.class);
 
         // Given
         given(configurationReplacer.resolveSubstitutions(configuration)).willReturn(replacedConfiguration);
         given(replacedConfiguration.getGoals()).willReturn(Collections.<String>emptyList());
+        given(replacedConfiguration.getProperties()).willReturn(configuredProperties);
         given(session.getGoals()).willReturn(goals);
         given(session.getSystemProperties()).willReturn(systemProperties);
         given(session.getUserProperties()).willReturn(userProperties);
-        given(propertiesAppender.append(systemProperties, userProperties)).willReturn(properties);
+        given(propertiesAppender.append(configuredProperties, systemProperties, userProperties)).willReturn(properties);
 
         // When
         final InvocationRequest actual = factory.create(project, session, configuration);
