@@ -91,9 +91,9 @@ public class DefaultInvocationRequestsFactoryTest {
         // Given
         given(configuration.isForEachProfile()).willReturn(false);
         given(configuration.getInvocations()).willReturn(asList(item1, item2, item3));
-        given(configurationFactory.forItem(configuration, item1)).willReturn(configuration1);
-        given(configurationFactory.forItem(configuration, item2)).willReturn(configuration2);
-        given(configurationFactory.forItem(configuration, item3)).willReturn(configuration3);
+        given(configurationFactory.forInvocation(configuration, item1)).willReturn(configuration1);
+        given(configurationFactory.forInvocation(configuration, item2)).willReturn(configuration2);
+        given(configurationFactory.forInvocation(configuration, item3)).willReturn(configuration3);
         given(requestFactory.create(project, session, configuration1)).willReturn(request1);
         given(requestFactory.create(project, session, configuration2)).willReturn(request2);
         given(requestFactory.create(project, session, configuration3)).willReturn(request3);

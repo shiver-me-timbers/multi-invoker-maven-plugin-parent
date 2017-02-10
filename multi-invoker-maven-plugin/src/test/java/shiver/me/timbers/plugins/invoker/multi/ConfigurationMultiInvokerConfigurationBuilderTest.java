@@ -15,9 +15,11 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static shiver.me.timbers.data.random.RandomBooleans.someBoolean;
+import static shiver.me.timbers.data.random.RandomEnums.someEnum;
 import static shiver.me.timbers.data.random.RandomStrings.someAlphanumericString;
 import static shiver.me.timbers.data.random.RandomStrings.someString;
 import static shiver.me.timbers.matchers.Matchers.hasField;
+import static shiver.me.timbers.matchers.Matchers.hasProperty;
 
 public class ConfigurationMultiInvokerConfigurationBuilderTest {
 
@@ -26,6 +28,23 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
     @Before
     public void setUp() {
         configuration = mock(MultiInvokerConfiguration.class);
+    }
+
+    @Test
+    public void Can_set_the_invocations_log_level() {
+
+        final LogLevel logLevel = someEnum(LogLevel.class);
+
+        // Given
+        given(configuration.getProperties()).willReturn(new Properties());
+
+        // When
+        final ConfigurationMultiInvokerConfigurationBuilder builder =
+            new ConfigurationMultiInvokerConfigurationBuilder(configuration);
+        builder.withLogLevel(logLevel);
+
+        // Then
+        assertThat(builder, hasField("logLevel", logLevel));
     }
 
     @Test
@@ -104,5 +123,21 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
         assertThat(actual.getProfiles(), equalTo(profiles));
         assertThat(actual.getGoals(), equalTo(goals));
         assertThat(actual.getProperties(), equalTo(properties));
+    }
+
+    @Test
+    public void Can_build_a_configuration_with_a_log_level() {
+
+        final LogLevel logLevel = someEnum(LogLevel.class);
+
+        // Given
+        given(configuration.getProperties()).willReturn(new Properties());
+
+        // When
+        final MultiInvokerConfiguration actual = new ConfigurationMultiInvokerConfigurationBuilder(configuration)
+            .withLogLevel(logLevel).build();
+
+        // Then
+        assertThat(actual, hasProperty("log.logger.threshold", logLevel.getThreshold()));
     }
 }

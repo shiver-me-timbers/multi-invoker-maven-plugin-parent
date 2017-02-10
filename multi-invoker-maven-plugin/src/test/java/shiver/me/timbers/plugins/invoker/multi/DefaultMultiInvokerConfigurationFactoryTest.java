@@ -18,6 +18,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static shiver.me.timbers.data.random.RandomBooleans.someBoolean;
+import static shiver.me.timbers.data.random.RandomEnums.someEnum;
 import static shiver.me.timbers.data.random.RandomStrings.someAlphanumericString;
 import static shiver.me.timbers.data.random.RandomStrings.someString;
 
@@ -74,7 +75,31 @@ public class DefaultMultiInvokerConfigurationFactoryTest {
     }
 
     @Test
-    public void Can_create_an_invocation_request_for_each_profile_defined_in_the_current_pom_file() {
+    public void Can_create_an_invocation_configuration_for_each_profile_defined_in_the_current_pom_file() {
+
+        final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
+        final LogLevel logLevel = someEnum(LogLevel.class);
+
+        final MultiInvokerConfigurationBuilder configurationBuilder = mock(MultiInvokerConfigurationBuilder.class);
+        final MultiInvokerConfigurationBuilder configurationBuilderLogLevel =
+            mock(MultiInvokerConfigurationBuilder.class);
+
+        final MultiInvokerConfiguration expected = mock(MultiInvokerConfiguration.class);
+
+        // Given
+        given(configurationBuilderFactory.createWith(configuration)).willReturn(configurationBuilder);
+        given(configurationBuilder.withLogLevel(logLevel)).willReturn(configurationBuilderLogLevel);
+        given(configurationBuilderLogLevel.build()).willReturn(expected);
+
+        // When
+        final MultiInvokerConfiguration actual = factory.forLogLevel(configuration, logLevel);
+
+        // Then
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void Can_create_an_invocation_configuration_for_a_supplied_profile() {
 
         final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
         final Profile profile = mock(Profile.class);
@@ -90,7 +115,6 @@ public class DefaultMultiInvokerConfigurationFactoryTest {
 
         // Given
         given(configurationBuilderFactory.createWith(configuration)).willReturn(configurationBuilder);
-        given(configuration.isForEachProfile()).willReturn(true);
         given(profile.getId()).willReturn(id);
         given(configurationBuilder.withInvocationId(id)).willReturn(configurationBuilderInvocationId);
         given(configurationBuilderInvocationId.withProfile(id)).willReturn(configurationBuilderProfile);
@@ -104,10 +128,10 @@ public class DefaultMultiInvokerConfigurationFactoryTest {
     }
 
     @Test
-    public void Can_create_an_invocation_request_for_each_configured_invocation() {
+    public void Can_create_an_invocation_configuration_for_an_invocation_id() {
 
         final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
-        final String item = someString();
+        final String invocation = someString();
 
         final MultiInvokerConfigurationBuilder configurationBuilder = mock(MultiInvokerConfigurationBuilder.class);
         final MultiInvokerConfigurationBuilder configurationBuilderInvocationId =
@@ -117,12 +141,11 @@ public class DefaultMultiInvokerConfigurationFactoryTest {
 
         // Given
         given(configurationBuilderFactory.createWith(configuration)).willReturn(configurationBuilder);
-        given(configuration.isForEachProfile()).willReturn(true);
-        given(configurationBuilder.withInvocationId(item)).willReturn(configurationBuilderInvocationId);
+        given(configurationBuilder.withInvocationId(invocation)).willReturn(configurationBuilderInvocationId);
         given(configurationBuilderInvocationId.build()).willReturn(expected);
 
         // When
-        final MultiInvokerConfiguration actual = factory.forItem(configuration, item);
+        final MultiInvokerConfiguration actual = factory.forInvocation(configuration, invocation);
 
         // Then
         assertThat(actual, is(expected));

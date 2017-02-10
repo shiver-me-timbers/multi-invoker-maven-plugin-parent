@@ -74,7 +74,7 @@ class DefaultInvocationRequestsFactory implements InvocationRequestsFactory {
                 requestFactory.create(
                     project,
                     session,
-                    configurationFactory.forItem(configuration, item)
+                    configurationFactory.forInvocation(configuration, item)
                 )
             );
         }

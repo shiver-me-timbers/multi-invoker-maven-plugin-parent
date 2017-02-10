@@ -51,6 +51,7 @@
                             <goal>invoker</goal>
                         </goals>
                         <configuration>
+                            <logLevel>ERROR</logLevel>
                             <invocations>${test-invocations}</invocations>
                         </configuration>
                     </execution>

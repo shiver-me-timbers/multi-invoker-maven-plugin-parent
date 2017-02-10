@@ -1,15 +1,14 @@
 package shiver.me.timbers.plugins.invoker.multi;
 
 import org.apache.maven.execution.MavenSession;
-import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.apache.maven.shared.invoker.InvocationResult;
 import org.apache.maven.shared.invoker.Invoker;
 import org.apache.maven.shared.invoker.MavenInvocationException;
-import org.codehaus.plexus.logging.console.ConsoleLogger;
 import org.codehaus.plexus.util.cli.CommandLineException;
 import org.junit.Before;
 import org.junit.Rule;
@@ -22,7 +21,6 @@ import java.util.Properties;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
-import static org.codehaus.plexus.logging.Logger.LEVEL_ERROR;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.empty;
@@ -35,6 +33,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static shiver.me.timbers.data.random.RandomBooleans.someBoolean;
+import static shiver.me.timbers.data.random.RandomEnums.someEnum;
 import static shiver.me.timbers.data.random.RandomIntegers.someIntegerGreaterThan;
 import static shiver.me.timbers.data.random.RandomStrings.someAlphanumericString;
 import static shiver.me.timbers.data.random.RandomStrings.someString;
@@ -45,6 +44,8 @@ public class MultiInvokerMojoTest {
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
+    private Log log;
+    private LogLevel logLevel;
     private MavenProject project;
     private MavenSession session;
     private MultiInvokerConfigurationFactory configurationFactory;
@@ -55,14 +56,24 @@ public class MultiInvokerMojoTest {
 
     @Before
     public void setUp() {
+        log = mock(Log.class);
+        logLevel = someEnum(LogLevel.class);
         project = mock(MavenProject.class);
         session = mock(MavenSession.class);
         configurationFactory = mock(MultiInvokerConfigurationFactory.class);
         requestsFactory = mock(InvocationRequestsFactory.class);
         mavenStrings = mock(MavenStrings.class);
         invoker = mock(Invoker.class);
-        mojo = new MultiInvokerMojo(project, session, configurationFactory, requestsFactory, mavenStrings, invoker);
-        mojo.setLog(new DefaultLog(new ConsoleLogger(LEVEL_ERROR, getClass().getName())));
+        mojo = new MultiInvokerMojo(
+            logLevel,
+            project,
+            session,
+            configurationFactory,
+            requestsFactory,
+            mavenStrings,
+            invoker
+        );
+        mojo.setLog(log);
     }
 
     @Test
@@ -72,20 +83,20 @@ public class MultiInvokerMojoTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void Test_to_cover_logging_code()
+    public void Will_log_the_invocation()
         throws MojoFailureException, MojoExecutionException, MavenInvocationException {
 
         final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
         final InvocationRequest request = mock(InvocationRequest.class);
         final InvocationResult success = mock(InvocationResult.class);
-        final List<String> goals = mock(List.class);
-        final List<String> profiles = mock(List.class);
+        final String goals = someString();
+        final String profiles = someString();
 
         // Given
-        given(configurationFactory.copy(mojo)).willReturn(configuration);
+        given(configurationFactory.forLogLevel(mojo, logLevel)).willReturn(configuration);
         given(requestsFactory.create(project, session, configuration)).willReturn(singletonList(request));
-        given(request.getGoals()).willReturn(goals);
-        given(request.getProfiles()).willReturn(profiles);
+        given(mavenStrings.toGoals(request)).willReturn(goals);
+        given(mavenStrings.toProfiles(request)).willReturn(profiles);
         given(invoker.execute(request)).willReturn(success);
         given(success.getExitCode()).willReturn(0);
 
@@ -93,12 +104,11 @@ public class MultiInvokerMojoTest {
         mojo.execute();
 
         // Then
-        then(mavenStrings).should().toGoals(request);
-        then(mavenStrings).should().toProfiles(request);
+        then(log).should().info(format("Invoking: mvn %s %s", goals, profiles));
     }
 
     @Test
-    public void Can_invoke_the_current_project_multiple_invocation()
+    public void Can_invoke_the_current_project_multiple_times()
         throws MojoFailureException, MojoExecutionException, MavenInvocationException {
 
         final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
@@ -108,7 +118,7 @@ public class MultiInvokerMojoTest {
         final InvocationResult success = mock(InvocationResult.class);
 
         // Given
-        given(configurationFactory.copy(mojo)).willReturn(configuration);
+        given(configurationFactory.forLogLevel(mojo, logLevel)).willReturn(configuration);
         given(requestsFactory.create(project, session, configuration)).willReturn(asList(request1, request2, request3));
         given(invoker.execute(request1)).willReturn(success);
         given(invoker.execute(request2)).willReturn(success);
@@ -135,7 +145,7 @@ public class MultiInvokerMojoTest {
         // Given
         given(session.getUserProperties()).willReturn(properties);
         given(properties.getProperty(INVOCATION_ID)).willReturn("");
-        given(configurationFactory.copy(mojo)).willReturn(configuration);
+        given(configurationFactory.forLogLevel(mojo, logLevel)).willReturn(configuration);
         given(requestsFactory.create(project, session, configuration)).willReturn(singletonList(request));
         given(invoker.execute(request)).willReturn(success);
         given(success.getExitCode()).willReturn(0);
@@ -148,7 +158,7 @@ public class MultiInvokerMojoTest {
     }
 
     @Test
-    public void Can_invoke_the_current_if_invocation_id_is_null()
+    public void Can_invoke_the_current_module_if_invocation_id_is_null()
         throws MojoFailureException, MojoExecutionException, MavenInvocationException {
 
         final Properties properties = mock(Properties.class);
@@ -160,7 +170,7 @@ public class MultiInvokerMojoTest {
         // Given
         given(session.getUserProperties()).willReturn(properties);
         given(properties.getProperty(INVOCATION_ID)).willReturn(null);
-        given(configurationFactory.copy(mojo)).willReturn(configuration);
+        given(configurationFactory.forLogLevel(mojo, logLevel)).willReturn(configuration);
         given(requestsFactory.create(project, session, configuration)).willReturn(singletonList(request));
         given(invoker.execute(request)).willReturn(success);
         given(success.getExitCode()).willReturn(0);
@@ -181,7 +191,7 @@ public class MultiInvokerMojoTest {
         final MavenInvocationException exception = new MavenInvocationException(someString());
 
         // Given
-        given(configurationFactory.copy(mojo)).willReturn(configuration);
+        given(configurationFactory.forLogLevel(mojo, logLevel)).willReturn(configuration);
         given(requestsFactory.create(project, session, configuration)).willReturn(singletonList(request));
         given(invoker.execute(request)).willThrow(exception);
         expectedException.expect(MojoExecutionException.class);
@@ -205,7 +215,7 @@ public class MultiInvokerMojoTest {
         final CommandLineException exception = mock(CommandLineException.class);
 
         // Given
-        given(configurationFactory.copy(mojo)).willReturn(configuration);
+        given(configurationFactory.forLogLevel(mojo, logLevel)).willReturn(configuration);
         given(requestsFactory.create(project, session, configuration)).willReturn(asList(request1, request2, request3));
         given(invoker.execute(request1)).willReturn(success);
         given(invoker.execute(request2)).willReturn(failure);

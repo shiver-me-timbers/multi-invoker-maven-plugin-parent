@@ -47,6 +47,9 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
     @Component
     private Invoker invoker;
 
+    @Parameter
+    private LogLevel logLevel;
+
     @Parameter(defaultValue = "false")
     private boolean forEachProfile;
 
@@ -69,6 +72,7 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
     }
 
     MultiInvokerMojo(
+        LogLevel logLevel,
         MavenProject project,
         MavenSession session,
         MultiInvokerConfigurationFactory configurationFactory,
@@ -76,6 +80,7 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
         MavenStrings mvns,
         Invoker invoker
     ) {
+        this.logLevel = logLevel;
         this.project = project;
         this.session = session;
         this.configurationFactory = configurationFactory;
@@ -90,7 +95,7 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
             return;
         }
         final List<InvocationRequest> requests = requestsFactory
-            .create(project, session, configurationFactory.copy(this));
+            .create(project, session, configurationFactory.forLogLevel(this, logLevel));
         for (InvocationRequest request : requests) {
             try {
                 getLog().info(format("Invoking: mvn %s %s", mvns.toGoals(request), mvns.toProfiles(request)));

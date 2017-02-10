@@ -131,6 +131,7 @@
                             <goal>invoker</goal>
                         </goals>
                         <configuration>
+                            <logLevel>ERROR</logLevel>
                             <invocations>${test-invocations}</invocations>
                             <profiles>${test-profiles}</profiles>
                         </configuration>

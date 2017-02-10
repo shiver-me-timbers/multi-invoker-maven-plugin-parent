@@ -82,6 +82,7 @@
                             <goal>invoker</goal>
                         </goals>
                         <configuration>
+                            <logLevel>ERROR</logLevel>
                             <invocations>${test-invocation}</invocations>
                             <profiles>enforce-phase</profiles>
                             <goals>clean generate-sources antrun:run</goals>

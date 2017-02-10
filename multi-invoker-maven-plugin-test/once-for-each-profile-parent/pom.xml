@@ -47,6 +47,7 @@
                             <goal>invoker</goal>
                         </goals>
                         <configuration>
+                            <logLevel>ERROR</logLevel>
                             <forEachProfile>true</forEachProfile>
                         </configuration>
                     </execution>

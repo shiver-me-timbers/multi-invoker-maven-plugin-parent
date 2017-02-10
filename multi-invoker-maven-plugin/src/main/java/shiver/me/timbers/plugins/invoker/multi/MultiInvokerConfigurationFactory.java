@@ -9,7 +9,9 @@ interface MultiInvokerConfigurationFactory {
 
     MultiInvokerConfiguration copy(MultiInvokerConfiguration configuration);
 
+    MultiInvokerConfiguration forLogLevel(MultiInvokerConfiguration configuration, LogLevel logLevel);
+
     MultiInvokerConfiguration forProfile(MultiInvokerConfiguration configuration, Profile profile);
 
-    MultiInvokerConfiguration forItem(MultiInvokerConfiguration configuration, String item);
+    MultiInvokerConfiguration forInvocation(MultiInvokerConfiguration configuration, String item);
 }

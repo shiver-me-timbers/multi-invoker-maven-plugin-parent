@@ -26,13 +26,18 @@ class DefaultMultiInvokerConfigurationFactory implements MultiInvokerConfigurati
     }
 
     @Override
+    public MultiInvokerConfiguration forLogLevel(MultiInvokerConfiguration configuration, LogLevel logLevel) {
+        return configurationBuilderFactory.createWith(configuration).withLogLevel(logLevel).build();
+    }
+
+    @Override
     public MultiInvokerConfiguration forProfile(MultiInvokerConfiguration configuration, Profile profile) {
         final String id = profile.getId();
         return configurationBuilderFactory.createWith(configuration).withInvocationId(id).withProfile(id).build();
     }
 
     @Override
-    public MultiInvokerConfiguration forItem(MultiInvokerConfiguration configuration, String item) {
+    public MultiInvokerConfiguration forInvocation(MultiInvokerConfiguration configuration, String item) {
         return configurationBuilderFactory.createWith(configuration).withInvocationId(item).build();
     }
 }
