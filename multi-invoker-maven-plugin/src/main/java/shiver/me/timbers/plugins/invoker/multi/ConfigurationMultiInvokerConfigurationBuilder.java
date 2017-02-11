@@ -53,7 +53,7 @@ class ConfigurationMultiInvokerConfigurationBuilder implements MultiInvokerConfi
 
     @Override
     public MultiInvokerConfiguration build() {
-        return new ImmutableMultiInvokerConfiguration(new MultiInvokerConfiguration() {
+        return new MultiInvokerConfiguration() {
             @Override
             public Log getLog() {
                 return logLevel != null ?
@@ -89,6 +89,6 @@ class ConfigurationMultiInvokerConfigurationBuilder implements MultiInvokerConfi
             public Properties getProperties() {
                 return properties;
             }
-        });
+        };
     }
 }

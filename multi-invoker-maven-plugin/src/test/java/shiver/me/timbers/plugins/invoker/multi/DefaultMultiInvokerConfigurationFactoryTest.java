@@ -1,25 +1,14 @@
 package shiver.me.timbers.plugins.invoker.multi;
 
 import org.apache.maven.model.Profile;
-import org.apache.maven.plugin.logging.Log;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-import java.util.Properties;
-
-import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static shiver.me.timbers.data.random.RandomBooleans.someBoolean;
 import static shiver.me.timbers.data.random.RandomEnums.someEnum;
-import static shiver.me.timbers.data.random.RandomStrings.someAlphanumericString;
 import static shiver.me.timbers.data.random.RandomStrings.someString;
 
 public class DefaultMultiInvokerConfigurationFactoryTest {
@@ -44,34 +33,19 @@ public class DefaultMultiInvokerConfigurationFactoryTest {
 
         final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
 
-        final Log log = mock(Log.class);
-        final Boolean forEachProfile = someBoolean();
-        final List<String> items = asList(someString(), someString(), someString());
-        final List<String> profiles = asList(someString(), someString(), someString());
-        final List<String> goals = asList(someString(), someString(), someString());
-        final Properties properties = new Properties();
+        final MultiInvokerConfigurationBuilder configurationBuilder = mock(MultiInvokerConfigurationBuilder.class);
+
+        final MultiInvokerConfiguration expected = mock(MultiInvokerConfiguration.class);
 
         // Given
-        given(configuration.getLog()).willReturn(log);
-        given(configuration.isForEachProfile()).willReturn(forEachProfile);
-        given(configuration.getInvocations()).willReturn(items);
-        given(configuration.getProfiles()).willReturn(profiles);
-        given(configuration.getGoals()).willReturn(goals);
-        given(configuration.getProperties()).willReturn(properties);
-        properties.setProperty(someAlphanumericString(3), someAlphanumericString(5));
-        properties.setProperty(someAlphanumericString(8), someAlphanumericString(13));
-        properties.setProperty(someAlphanumericString(21), someAlphanumericString(34));
+        given(configurationBuilderFactory.createWith(configuration)).willReturn(configurationBuilder);
+        given(configurationBuilder.build()).willReturn(expected);
 
         // When
         final MultiInvokerConfiguration actual = factory.copy(configuration);
 
         // Then
-        assertThat(actual.getLog(), is(log));
-        assertThat(actual.isForEachProfile(), is(forEachProfile));
-        assertThat(actual.getInvocations(), allOf(not(sameInstance(items)), equalTo(items)));
-        assertThat(actual.getProfiles(), allOf(not(sameInstance(profiles)), equalTo(profiles)));
-        assertThat(actual.getGoals(), allOf(not(sameInstance(goals)), equalTo(goals)));
-        assertThat(actual.getProperties(), allOf(not(sameInstance(properties)), equalTo(properties)));
+        assertThat(actual, is(expected));
     }
 
     @Test

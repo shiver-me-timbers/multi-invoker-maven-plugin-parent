@@ -22,7 +22,7 @@ class DefaultMultiInvokerConfigurationFactory implements MultiInvokerConfigurati
 
     @Override
     public MultiInvokerConfiguration copy(MultiInvokerConfiguration configuration) {
-        return new ImmutableMultiInvokerConfiguration(configuration);
+        return configurationBuilderFactory.createWith(configuration).build();
     }
 
     @Override

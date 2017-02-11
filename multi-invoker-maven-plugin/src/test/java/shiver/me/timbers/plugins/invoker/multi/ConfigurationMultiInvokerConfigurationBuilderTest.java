@@ -138,6 +138,6 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
             .withLogLevel(logLevel).build();
 
         // Then
-        assertThat(actual, hasProperty("log.logger.threshold", logLevel.getThreshold()));
+        assertThat(actual.getLog(), hasProperty("logger.threshold", logLevel.getThreshold()));
     }
 }
