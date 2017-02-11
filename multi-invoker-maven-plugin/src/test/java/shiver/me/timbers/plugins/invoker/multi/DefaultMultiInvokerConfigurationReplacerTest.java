@@ -1,6 +1,8 @@
 package shiver.me.timbers.plugins.invoker.multi;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
 import org.junit.Test;
 
 import java.util.List;
@@ -31,6 +33,8 @@ public class DefaultMultiInvokerConfigurationReplacerTest {
 
         final MultiInvokerConfiguration configurationCopy = mock(MultiInvokerConfiguration.class);
 
+        final MavenProject project = mock(MavenProject.class);
+        final MavenSession session = mock(MavenSession.class);
         final Log log = mock(Log.class);
         final String invocationid = someString();
         final boolean forEachProfile = someBoolean();
@@ -52,6 +56,8 @@ public class DefaultMultiInvokerConfigurationReplacerTest {
 
         // Given
         given(configurationFactory.copy(configuration)).willReturn(configurationCopy);
+        given(configurationCopy.getProject()).willReturn(project);
+        given(configurationCopy.getSession()).willReturn(session);
         given(configurationCopy.getLog()).willReturn(log);
         given(configurationCopy.getInvocationId()).willReturn(invocationid);
         given(configurationCopy.isForEachProfile()).willReturn(forEachProfile);
@@ -73,6 +79,8 @@ public class DefaultMultiInvokerConfigurationReplacerTest {
         ).resolveSubstitutions(configuration);
 
         // Then
+        assertThat(actual.getProject(), is(project));
+        assertThat(actual.getSession(), is(session));
         assertThat(actual.getLog(), is(log));
         assertThat(actual.getInvocationId(), is(invocationid));
         assertThat(actual.isForEachProfile(), is(forEachProfile));

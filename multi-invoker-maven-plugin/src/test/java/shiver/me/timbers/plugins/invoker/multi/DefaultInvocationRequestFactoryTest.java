@@ -66,6 +66,8 @@ public class DefaultInvocationRequestFactoryTest {
 
         // Given
         given(configurationReplacer.resolveSubstitutions(configuration)).willReturn(replacedConfiguration);
+        given(replacedConfiguration.getProject()).willReturn(project);
+        given(replacedConfiguration.getSession()).willReturn(session);
         given(replacedConfiguration.getLog()).willReturn(log);
         given(replacedConfiguration.getProfiles()).willReturn(profiles);
         given(replacedConfiguration.getGoals()).willReturn(null);
@@ -80,7 +82,7 @@ public class DefaultInvocationRequestFactoryTest {
         given(replacedConfiguration.getInvocationId()).willReturn(invocationId);
 
         // When
-        final InvocationRequest actual = factory.create(project, session, configuration);
+        final InvocationRequest actual = factory.create(configuration);
 
         // Then
         verify(properties).setProperty(INVOCATION_ID, invocationId);
@@ -115,6 +117,8 @@ public class DefaultInvocationRequestFactoryTest {
 
         // Given
         given(configurationReplacer.resolveSubstitutions(configuration)).willReturn(replacedConfiguration);
+        given(replacedConfiguration.getProject()).willReturn(project);
+        given(replacedConfiguration.getSession()).willReturn(session);
         given(replacedConfiguration.getLog()).willReturn(log);
         given(replacedConfiguration.getProfiles()).willReturn(profiles);
         given(replacedConfiguration.getGoals()).willReturn(goals);
@@ -128,7 +132,7 @@ public class DefaultInvocationRequestFactoryTest {
         given(replacedConfiguration.getInvocationId()).willReturn(invocationId);
 
         // When
-        final InvocationRequest actual = factory.create(project, session, configuration);
+        final InvocationRequest actual = factory.create(configuration);
 
         // Then
         then(properties).should().setProperty(INVOCATION_ID, invocationId);
@@ -145,7 +149,6 @@ public class DefaultInvocationRequestFactoryTest {
     @SuppressWarnings("unchecked")
     public void Empty_goals_are_ignored() {
 
-        final MavenProject project = mock(MavenProject.class);
         final MavenSession session = mock(MavenSession.class);
         final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
 
@@ -158,6 +161,8 @@ public class DefaultInvocationRequestFactoryTest {
 
         // Given
         given(configurationReplacer.resolveSubstitutions(configuration)).willReturn(replacedConfiguration);
+        given(replacedConfiguration.getProject()).willReturn(mock(MavenProject.class));
+        given(replacedConfiguration.getSession()).willReturn(session);
         given(replacedConfiguration.getGoals()).willReturn(Collections.<String>emptyList());
         given(replacedConfiguration.getProperties()).willReturn(configuredProperties);
         given(session.getGoals()).willReturn(goals);
@@ -166,7 +171,7 @@ public class DefaultInvocationRequestFactoryTest {
         given(propertiesAppender.append(configuredProperties, systemProperties, userProperties)).willReturn(properties);
 
         // When
-        final InvocationRequest actual = factory.create(project, session, configuration);
+        final InvocationRequest actual = factory.create(configuration);
 
         // Then
         assertThat(actual.getGoals(), is(goals));

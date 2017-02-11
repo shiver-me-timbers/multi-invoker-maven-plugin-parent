@@ -94,9 +94,7 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
         if (isRunFromMultiInvocation()) {
             return;
         }
-        final List<InvocationRequest> requests = requestsFactory
-            .create(project, session, configurationFactory.forLogLevel(this, logLevel));
-        for (InvocationRequest request : requests) {
+        for (InvocationRequest request : requestsFactory.create(configurationFactory.forLogLevel(this, logLevel))) {
             try {
                 getLog().info(format("Invoking: mvn %s %s", mvns.toGoals(request), mvns.toProfiles(request)));
                 final InvocationResult result = invoker.execute(request);
@@ -107,6 +105,16 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
                 throw new MojoExecutionException("Multi invocation is invalid.", e);
             }
         }
+    }
+
+    @Override
+    public MavenProject getProject() {
+        return project;
+    }
+
+    @Override
+    public MavenSession getSession() {
+        return session;
     }
 
     @Override

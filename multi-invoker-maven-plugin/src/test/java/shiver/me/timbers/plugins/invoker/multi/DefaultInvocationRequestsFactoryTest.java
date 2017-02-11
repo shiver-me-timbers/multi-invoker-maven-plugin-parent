@@ -1,6 +1,5 @@
 package shiver.me.timbers.plugins.invoker.multi;
 
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Profile;
 import org.apache.maven.project.MavenProject;
@@ -38,10 +37,9 @@ public class DefaultInvocationRequestsFactoryTest {
     @Test
     public void Can_create_an_invocation_request_for_each_profile_defined_in_the_current_pom_file() {
 
-        final MavenProject project = mock(MavenProject.class);
-        final MavenSession session = mock(MavenSession.class);
         final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
 
+        final MavenProject project = mock(MavenProject.class);
         final Model model = mock(Model.class);
         final Profile profile1 = mock(Profile.class);
         final Profile profile2 = mock(Profile.class);
@@ -54,18 +52,19 @@ public class DefaultInvocationRequestsFactoryTest {
         final InvocationRequest request3 = mock(InvocationRequest.class);
 
         // Given
+        given(configuration.getProject()).willReturn(project);
         given(configuration.isForEachProfile()).willReturn(true);
         given(project.getModel()).willReturn(model);
         given(model.getProfiles()).willReturn(asList(profile1, profile2, profile3));
         given(configurationFactory.forProfile(configuration, profile1)).willReturn(configuration1);
         given(configurationFactory.forProfile(configuration, profile2)).willReturn(configuration2);
         given(configurationFactory.forProfile(configuration, profile3)).willReturn(configuration3);
-        given(requestFactory.create(project, session, configuration1)).willReturn(request1);
-        given(requestFactory.create(project, session, configuration2)).willReturn(request2);
-        given(requestFactory.create(project, session, configuration3)).willReturn(request3);
+        given(requestFactory.create(configuration1)).willReturn(request1);
+        given(requestFactory.create(configuration2)).willReturn(request2);
+        given(requestFactory.create(configuration3)).willReturn(request3);
 
         // When
-        final List<InvocationRequest> actual = factory.create(project, session, configuration);
+        final List<InvocationRequest> actual = factory.create(configuration);
 
         // Then
         assertThat(actual, contains(request1, request2, request3));
@@ -74,8 +73,6 @@ public class DefaultInvocationRequestsFactoryTest {
     @Test
     public void Can_create_an_invocation_request_for_each_configured_invocation() {
 
-        final MavenProject project = mock(MavenProject.class);
-        final MavenSession session = mock(MavenSession.class);
         final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
 
         final String item1 = someString();
@@ -94,12 +91,12 @@ public class DefaultInvocationRequestsFactoryTest {
         given(configurationFactory.forInvocation(configuration, item1)).willReturn(configuration1);
         given(configurationFactory.forInvocation(configuration, item2)).willReturn(configuration2);
         given(configurationFactory.forInvocation(configuration, item3)).willReturn(configuration3);
-        given(requestFactory.create(project, session, configuration1)).willReturn(request1);
-        given(requestFactory.create(project, session, configuration2)).willReturn(request2);
-        given(requestFactory.create(project, session, configuration3)).willReturn(request3);
+        given(requestFactory.create(configuration1)).willReturn(request1);
+        given(requestFactory.create(configuration2)).willReturn(request2);
+        given(requestFactory.create(configuration3)).willReturn(request3);
 
         // When
-        final List<InvocationRequest> actual = factory.create(project, session, configuration);
+        final List<InvocationRequest> actual = factory.create(configuration);
 
         // Then
         assertThat(actual, contains(request1, request2, request3));

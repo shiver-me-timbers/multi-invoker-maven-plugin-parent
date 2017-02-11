@@ -94,7 +94,7 @@ public class MultiInvokerMojoTest {
 
         // Given
         given(configurationFactory.forLogLevel(mojo, logLevel)).willReturn(configuration);
-        given(requestsFactory.create(project, session, configuration)).willReturn(singletonList(request));
+        given(requestsFactory.create(configuration)).willReturn(singletonList(request));
         given(mavenStrings.toGoals(request)).willReturn(goals);
         given(mavenStrings.toProfiles(request)).willReturn(profiles);
         given(invoker.execute(request)).willReturn(success);
@@ -119,7 +119,7 @@ public class MultiInvokerMojoTest {
 
         // Given
         given(configurationFactory.forLogLevel(mojo, logLevel)).willReturn(configuration);
-        given(requestsFactory.create(project, session, configuration)).willReturn(asList(request1, request2, request3));
+        given(requestsFactory.create(configuration)).willReturn(asList(request1, request2, request3));
         given(invoker.execute(request1)).willReturn(success);
         given(invoker.execute(request2)).willReturn(success);
         given(invoker.execute(request3)).willReturn(success);
@@ -146,7 +146,7 @@ public class MultiInvokerMojoTest {
         given(session.getUserProperties()).willReturn(properties);
         given(properties.getProperty(INVOCATION_ID)).willReturn("");
         given(configurationFactory.forLogLevel(mojo, logLevel)).willReturn(configuration);
-        given(requestsFactory.create(project, session, configuration)).willReturn(singletonList(request));
+        given(requestsFactory.create(configuration)).willReturn(singletonList(request));
         given(invoker.execute(request)).willReturn(success);
         given(success.getExitCode()).willReturn(0);
 
@@ -171,7 +171,7 @@ public class MultiInvokerMojoTest {
         given(session.getUserProperties()).willReturn(properties);
         given(properties.getProperty(INVOCATION_ID)).willReturn(null);
         given(configurationFactory.forLogLevel(mojo, logLevel)).willReturn(configuration);
-        given(requestsFactory.create(project, session, configuration)).willReturn(singletonList(request));
+        given(requestsFactory.create(configuration)).willReturn(singletonList(request));
         given(invoker.execute(request)).willReturn(success);
         given(success.getExitCode()).willReturn(0);
 
@@ -192,7 +192,7 @@ public class MultiInvokerMojoTest {
 
         // Given
         given(configurationFactory.forLogLevel(mojo, logLevel)).willReturn(configuration);
-        given(requestsFactory.create(project, session, configuration)).willReturn(singletonList(request));
+        given(requestsFactory.create(configuration)).willReturn(singletonList(request));
         given(invoker.execute(request)).willThrow(exception);
         expectedException.expect(MojoExecutionException.class);
         expectedException.expectMessage("Multi invocation is invalid.");
@@ -216,7 +216,7 @@ public class MultiInvokerMojoTest {
 
         // Given
         given(configurationFactory.forLogLevel(mojo, logLevel)).willReturn(configuration);
-        given(requestsFactory.create(project, session, configuration)).willReturn(asList(request1, request2, request3));
+        given(requestsFactory.create(configuration)).willReturn(asList(request1, request2, request3));
         given(invoker.execute(request1)).willReturn(success);
         given(invoker.execute(request2)).willReturn(failure);
         given(success.getExitCode()).willReturn(0);
@@ -228,6 +228,28 @@ public class MultiInvokerMojoTest {
 
         // When
         mojo.execute();
+    }
+
+    @Test
+    public void Can_get_the_current_maven_project()
+        throws MojoFailureException, MojoExecutionException, MavenInvocationException {
+
+        // When
+        final MavenProject actual = mojo.getProject();
+
+        // Then
+        assertThat(actual, is(project));
+    }
+
+    @Test
+    public void Can_get_the_current_maven_session()
+        throws MojoFailureException, MojoExecutionException, MavenInvocationException {
+
+        // When
+        final MavenSession actual = mojo.getSession();
+
+        // Then
+        assertThat(actual, is(session));
     }
 
     @Test

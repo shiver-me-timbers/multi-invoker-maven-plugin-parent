@@ -1,8 +1,6 @@
 package shiver.me.timbers.plugins.invoker.multi;
 
-import org.apache.maven.execution.MavenSession;
 import org.apache.maven.model.Profile;
-import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.codehaus.plexus.component.annotations.Component;
 import org.codehaus.plexus.component.annotations.Requirement;
@@ -35,27 +33,19 @@ class DefaultInvocationRequestsFactory implements InvocationRequestsFactory {
 
     @Override
     public List<InvocationRequest> create(
-        MavenProject project,
-        MavenSession session,
         MultiInvokerConfiguration configuration
     ) {
         if (configuration.isForEachProfile()) {
-            return createRequestsForProfiles(project, session, configuration);
+            return createRequestsForProfiles(configuration);
         }
-        return createRequestsForItems(project, session, configuration);
+        return createRequestsForItems(configuration);
     }
 
-    private List<InvocationRequest> createRequestsForProfiles(
-        MavenProject project,
-        MavenSession session,
-        MultiInvokerConfiguration configuration
-    ) {
+    private List<InvocationRequest> createRequestsForProfiles(MultiInvokerConfiguration configuration) {
         final List<InvocationRequest> requests = new ArrayList<>();
-        for (Profile profile : project.getModel().getProfiles()) {
+        for (Profile profile : configuration.getProject().getModel().getProfiles()) {
             requests.add(
                 requestFactory.create(
-                    project,
-                    session,
                     configurationFactory.forProfile(configuration, profile)
                 )
             );
@@ -64,16 +54,12 @@ class DefaultInvocationRequestsFactory implements InvocationRequestsFactory {
     }
 
     private List<InvocationRequest> createRequestsForItems(
-        MavenProject project,
-        MavenSession session,
         MultiInvokerConfiguration configuration
     ) {
         final List<InvocationRequest> requests = new ArrayList<>();
         for (String item : configuration.getInvocations()) {
             requests.add(
                 requestFactory.create(
-                    project,
-                    session,
                     configurationFactory.forInvocation(configuration, item)
                 )
             );

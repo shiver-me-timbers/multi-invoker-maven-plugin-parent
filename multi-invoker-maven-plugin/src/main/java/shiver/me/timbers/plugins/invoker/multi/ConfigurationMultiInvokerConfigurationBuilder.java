@@ -1,7 +1,9 @@
 package shiver.me.timbers.plugins.invoker.multi;
 
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.plugin.logging.Log;
+import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.logging.console.ConsoleLogger;
 
 import java.util.ArrayList;
@@ -13,6 +15,8 @@ import java.util.Properties;
  */
 class ConfigurationMultiInvokerConfigurationBuilder implements MultiInvokerConfigurationBuilder {
 
+    private final MavenProject project;
+    private final MavenSession session;
     private final boolean forEachProfile;
     private final List<String> invocations;
     private final List<String> profiles;
@@ -23,6 +27,8 @@ class ConfigurationMultiInvokerConfigurationBuilder implements MultiInvokerConfi
     private LogLevel logLevel;
 
     ConfigurationMultiInvokerConfigurationBuilder(MultiInvokerConfiguration configuration) {
+        project = configuration.getProject();
+        session = configuration.getSession();
         forEachProfile = configuration.isForEachProfile();
         invocations = new ArrayList<>(configuration.getInvocations());
         profiles = new ArrayList<>(configuration.getProfiles());
@@ -54,6 +60,16 @@ class ConfigurationMultiInvokerConfigurationBuilder implements MultiInvokerConfi
     @Override
     public MultiInvokerConfiguration build() {
         return new MultiInvokerConfiguration() {
+            @Override
+            public MavenProject getProject() {
+                return project;
+            }
+
+            @Override
+            public MavenSession getSession() {
+                return session;
+            }
+
             @Override
             public Log getLog() {
                 return logLevel != null ?

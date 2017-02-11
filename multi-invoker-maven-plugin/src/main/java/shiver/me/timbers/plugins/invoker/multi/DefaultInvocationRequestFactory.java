@@ -41,15 +41,24 @@ class DefaultInvocationRequestFactory implements InvocationRequestFactory {
     }
 
     @Override
-    public InvocationRequest create(MavenProject project, MavenSession session, MultiInvokerConfiguration configuration) {
-        final MultiInvokerConfiguration replacedConfiguration = configurationReplacer.resolveSubstitutions(configuration);
+    public InvocationRequest create(MultiInvokerConfiguration configuration) {
+        return createReplacedRequest(configurationReplacer.resolveSubstitutions(configuration));
+    }
+
+    /**
+     * This method if functionally redundant, but exists to stop the possibility of accidentally using the root
+     * configuration.
+     */
+    private InvocationRequest createReplacedRequest(MultiInvokerConfiguration configuration) {
         final InvocationRequest request = new DefaultInvocationRequest();
-        request.setOutputHandler(outputHandlerFactory.createFrom(replacedConfiguration.getLog()));
-        request.setProfiles(replacedConfiguration.getProfiles());
+        final MavenProject project = configuration.getProject();
+        final MavenSession session = configuration.getSession();
+        request.setOutputHandler(outputHandlerFactory.createFrom(configuration.getLog()));
+        request.setProfiles(configuration.getProfiles());
         request.setBaseDirectory(project.getBasedir());
         request.setPomFile(project.getFile());
-        request.setGoals(chooseGoals(replacedConfiguration, session));
-        request.setProperties(configureProperties(session, replacedConfiguration));
+        request.setGoals(chooseGoals(configuration, session));
+        request.setProperties(configureProperties(session, configuration));
         return request;
     }
 
