@@ -25,12 +25,14 @@ public class DefaultMultiInvokerLoggerTest {
         final InvocationRequest request = mock(InvocationRequest.class);
 
         final Log log = mock(Log.class);
+        final String artifactId = someString();
         final String goals = someString();
         final String profiles = someString();
         final String properties = someString();
 
         // Given
         given(configuration.getLog()).willReturn(log);
+        given(mavenStrings.toArtifactId(configuration)).willReturn(artifactId);
         given(mavenStrings.toGoals(request)).willReturn(goals);
         given(mavenStrings.toProfiles(request)).willReturn(profiles);
         given(mavenStrings.toProperties(configuration, request)).willReturn(properties);
@@ -39,6 +41,6 @@ public class DefaultMultiInvokerLoggerTest {
         new DefaultMultiInvokerLogger(mavenStrings).log(configuration, request);
 
         // Then
-        then(log).should().info(format("Invoking: mvn %s%s%s", goals, profiles, properties));
+        then(log).should().info(format("Invoking (%s): mvn %s%s%s", artifactId, goals, profiles, properties));
     }
 }

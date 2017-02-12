@@ -19,6 +19,11 @@ import static java.util.Map.Entry;
 class DefaultMavenStrings implements MavenStrings {
 
     @Override
+    public String toArtifactId(MultiInvokerConfiguration configuration) {
+        return configuration.getProject().getArtifact().toString();
+    }
+
+    @Override
     public String toGoals(InvocationRequest request) {
         return concat(request.getGoals(), " ");
     }

@@ -1,6 +1,8 @@
 package shiver.me.timbers.plugins.invoker.multi;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.invoker.InvocationRequest;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,6 +32,29 @@ public class DefaultMavenStringsTest {
     @Before
     public void setUp() {
         mavenStrings = new DefaultMavenStrings();
+    }
+
+    @Test
+    public void Can_convert_a_configuration_into_a_maven_artifact_id_string() {
+
+        final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
+
+        final MavenProject project = mock(MavenProject.class);
+
+        final Artifact artifact = mock(Artifact.class);
+
+        final String expected = someString();
+
+        // Given
+        given(configuration.getProject()).willReturn(project);
+        given(project.getArtifact()).willReturn(artifact);
+        given(artifact.toString()).willReturn(expected);
+
+        // When
+        final String actual = mavenStrings.toArtifactId(configuration);
+
+        // Then
+        assertThat(actual, is(expected));
     }
 
     @Test

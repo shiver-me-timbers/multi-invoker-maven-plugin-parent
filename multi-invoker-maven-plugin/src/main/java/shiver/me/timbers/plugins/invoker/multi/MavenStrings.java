@@ -7,6 +7,8 @@ import org.apache.maven.shared.invoker.InvocationRequest;
  */
 interface MavenStrings {
 
+    String toArtifactId(MultiInvokerConfiguration configuration);
+
     String toGoals(InvocationRequest request);
 
     String toProfiles(InvocationRequest request);

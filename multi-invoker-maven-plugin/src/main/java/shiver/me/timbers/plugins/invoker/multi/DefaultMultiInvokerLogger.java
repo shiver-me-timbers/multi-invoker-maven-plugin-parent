@@ -26,7 +26,8 @@ class DefaultMultiInvokerLogger implements MultiInvokerLogger {
     public void log(MultiInvokerConfiguration configuration, InvocationRequest request) {
         configuration.getLog().info(
             format(
-                "Invoking: mvn %s%s%s",
+                "Invoking (%s): mvn %s%s%s",
+                mavenStrings.toArtifactId(configuration),
                 mavenStrings.toGoals(request),
                 mavenStrings.toProfiles(request),
                 mavenStrings.toProperties(configuration, request)
