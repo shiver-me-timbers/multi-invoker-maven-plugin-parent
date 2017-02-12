@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.apache.maven.plugins.annotations.LifecyclePhase.PACKAGE;
 
@@ -36,13 +35,13 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
     private MavenSession session;
 
     @Component
+    private MultiInvokerLogger logger;
+
+    @Component
     private MultiInvokerConfigurationFactory configurationFactory;
 
     @Component
     private InvocationRequestsFactory requestsFactory;
-
-    @Component
-    private MavenStrings mvns;
 
     @Component
     private Invoker invoker;
@@ -72,21 +71,21 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
     }
 
     MultiInvokerMojo(
-        LogLevel logLevel,
         MavenProject project,
         MavenSession session,
+        MultiInvokerLogger logger,
         MultiInvokerConfigurationFactory configurationFactory,
         InvocationRequestsFactory requestsFactory,
-        MavenStrings mvns,
-        Invoker invoker
+        Invoker invoker,
+        LogLevel logLevel
     ) {
-        this.logLevel = logLevel;
         this.project = project;
         this.session = session;
+        this.logger = logger;
         this.configurationFactory = configurationFactory;
         this.requestsFactory = requestsFactory;
-        this.mvns = mvns;
         this.invoker = invoker;
+        this.logLevel = logLevel;
     }
 
     @Override
@@ -96,7 +95,7 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
         }
         for (InvocationRequest request : requestsFactory.create(configurationFactory.forLogLevel(this, logLevel))) {
             try {
-                getLog().info(format("Invoking: mvn %s %s", mvns.toGoals(request), mvns.toProfiles(request)));
+                logger.log(this, request);
                 final InvocationResult result = invoker.execute(request);
                 if (result.getExitCode() > 0) {
                     throw new MojoExecutionException("Multi invocation has failed.", result.getExecutionException());

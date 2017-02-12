@@ -2,6 +2,13 @@
 <component-set>
     <components>
         <component>
+            <role>shiver.me.timbers.plugins.invoker.multi.MultiInvokerLogger</role>
+            <role-hint>default</role-hint>
+            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultMultiInvokerLogger</implementation>
+            <description/>
+            <isolated-realm>false</isolated-realm>
+        </component>
+        <component>
             <role>shiver.me.timbers.plugins.invoker.multi.InvocationRequestsFactory</role>
             <role-hint>default</role-hint>
             <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultInvocationRequestsFactory</implementation>

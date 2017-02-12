@@ -10,4 +10,6 @@ interface MavenStrings {
     String toGoals(InvocationRequest request);
 
     String toProfiles(InvocationRequest request);
+
+    String toProperties(MultiInvokerConfiguration configuration, InvocationRequest request);
 }
