@@ -17,6 +17,6 @@ multi-invoker-maven-plugin-parent
 ===========
 [![Build Status](https://travis-ci.org/shiver-me-timbers/multi-invoker-maven-plugin-parent.svg)](https://travis-ci.org/shiver-me-timbers/multi-invoker-maven-plugin-parent)
 [![Coverage Status](https://coveralls.io/repos/shiver-me-timbers/multi-invoker-maven-plugin-parent/badge.svg?branch=master&service=github)](https://coveralls.io/github/shiver-me-timbers/multi-invoker-maven-plugin-parent?branch=master)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.shiver-me-timbers/multi-invoker-maven-plugin-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.shiver-me-timbers/multi-invoker-maven-plugin-parent/)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.shiver-me-timbers/multi-invoker-maven-plugin/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.shiver-me-timbers/multi-invoker-maven-plugin/)
 
-This parent project holds the [multi-invoker-maven-plugin](multi-invoker-maven-plugin) project and it's [tests](multi-invoker-maven-plugin-test).
+This plugin can be used to invoke the current maven project multiple times with different profiles or properties.
