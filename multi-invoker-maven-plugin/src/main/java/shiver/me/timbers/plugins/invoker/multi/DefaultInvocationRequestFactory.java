@@ -1,6 +1,7 @@
 package shiver.me.timbers.plugins.invoker.multi;
 
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.shared.invoker.DefaultInvocationRequest;
 import org.apache.maven.shared.invoker.InvocationRequest;
@@ -53,7 +54,9 @@ class DefaultInvocationRequestFactory implements InvocationRequestFactory {
         final InvocationRequest request = new DefaultInvocationRequest();
         final MavenProject project = configuration.getProject();
         final MavenSession session = configuration.getSession();
-        request.setOutputHandler(outputHandlerFactory.createFrom(configuration.getLog()));
+        final Log log = configuration.getLog();
+        request.setOutputHandler(outputHandlerFactory.createInfoFrom(log));
+        request.setErrorHandler(outputHandlerFactory.createErrorFrom(log));
         request.setProfiles(configuration.getProfiles());
         request.setBaseDirectory(project.getBasedir());
         request.setPomFile(project.getFile());

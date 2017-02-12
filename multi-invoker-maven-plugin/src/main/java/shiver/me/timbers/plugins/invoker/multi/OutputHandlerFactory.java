@@ -8,5 +8,7 @@ import org.apache.maven.shared.invoker.InvocationOutputHandler;
  */
 interface OutputHandlerFactory {
 
-    InvocationOutputHandler createFrom(Log log);
+    InvocationOutputHandler createInfoFrom(Log log);
+
+    InvocationOutputHandler createErrorFrom(Log log);
 }

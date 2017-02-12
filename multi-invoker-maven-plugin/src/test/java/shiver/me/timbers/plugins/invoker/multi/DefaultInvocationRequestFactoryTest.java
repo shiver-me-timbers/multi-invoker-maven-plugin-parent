@@ -72,7 +72,7 @@ public class DefaultInvocationRequestFactoryTest {
         given(replacedConfiguration.getProfiles()).willReturn(profiles);
         given(replacedConfiguration.getGoals()).willReturn(null);
         given(replacedConfiguration.getProperties()).willReturn(configuredProperties);
-        given(outputHandlerFactory.createFrom(log)).willReturn(outputHandler);
+        given(outputHandlerFactory.createInfoFrom(log)).willReturn(outputHandler);
         given(project.getBasedir()).willReturn(baseDir);
         given(project.getFile()).willReturn(pomFile);
         given(session.getGoals()).willReturn(goals);
@@ -106,7 +106,8 @@ public class DefaultInvocationRequestFactoryTest {
         final Log log = mock(Log.class);
         final List<String> profiles = mock(List.class);
         final List<String> goals = mock(List.class);
-        final InvocationOutputHandler outputHandler = mock(InvocationOutputHandler.class);
+        final InvocationOutputHandler infoOutputHandler = mock(InvocationOutputHandler.class);
+        final InvocationOutputHandler errorOutputHandler = mock(InvocationOutputHandler.class);
         final File baseDir = mock(File.class);
         final File pomFile = mock(File.class);
         final Properties configuredProperties = mock(Properties.class);
@@ -123,7 +124,8 @@ public class DefaultInvocationRequestFactoryTest {
         given(replacedConfiguration.getProfiles()).willReturn(profiles);
         given(replacedConfiguration.getGoals()).willReturn(goals);
         given(replacedConfiguration.getProperties()).willReturn(configuredProperties);
-        given(outputHandlerFactory.createFrom(log)).willReturn(outputHandler);
+        given(outputHandlerFactory.createInfoFrom(log)).willReturn(infoOutputHandler);
+        given(outputHandlerFactory.createErrorFrom(log)).willReturn(errorOutputHandler);
         given(project.getBasedir()).willReturn(baseDir);
         given(project.getFile()).willReturn(pomFile);
         given(session.getSystemProperties()).willReturn(systemProperties);
@@ -137,7 +139,8 @@ public class DefaultInvocationRequestFactoryTest {
         // Then
         then(properties).should().setProperty(INVOCATION_ID, invocationId);
         then(session).should(never()).getGoals();
-        assertThat(actual.getOutputHandler(null), is(outputHandler));
+        assertThat(actual.getOutputHandler(null), is(infoOutputHandler));
+        assertThat(actual.getErrorHandler(null), is(errorOutputHandler));
         assertThat(actual.getProfiles(), is(profiles));
         assertThat(actual.getBaseDirectory(), is(baseDir));
         assertThat(actual.getPomFile(), is(pomFile));

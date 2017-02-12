@@ -11,11 +11,21 @@ import org.codehaus.plexus.component.annotations.Component;
 class DefaultOutputHandlerFactory implements OutputHandlerFactory {
 
     @Override
-    public InvocationOutputHandler createFrom(final Log log) {
+    public InvocationOutputHandler createInfoFrom(final Log log) {
         return new InvocationOutputHandler() {
             @Override
             public void consumeLine(String line) {
                 log.info(line);
+            }
+        };
+    }
+
+    @Override
+    public InvocationOutputHandler createErrorFrom(final Log log) {
+        return new InvocationOutputHandler() {
+            @Override
+            public void consumeLine(String line) {
+                log.error(line);
             }
         };
     }
