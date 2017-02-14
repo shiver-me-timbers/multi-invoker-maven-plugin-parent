@@ -21,7 +21,7 @@
     <parent>
         <groupId>com.github.shiver-me-timbers</groupId>
         <artifactId>multi-invoker-maven-plugin-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>multi-invoker-maven-plugin-test</artifactId>
@@ -34,8 +34,8 @@
 
     <properties>
         <invocation.id/>
-        <skip-surefire>true</skip-surefire>
-        <skip-failsafe>true</skip-failsafe>
+        <skip-surefire>false</skip-surefire>
+        <skip-failsafe>false</skip-failsafe>
     </properties>
 
     <profiles>
@@ -44,12 +44,12 @@
             <activation>
                 <property>
                     <!-- We don't want to run the integration tests during the multi-invoker-maven-plugin builds. -->
-                    <name>!invocation.id</name>
+                    <name>invocation.id</name>
                 </property>
             </activation>
             <properties>
-                <skip-surefire>false</skip-surefire>
-                <skip-failsafe>false</skip-failsafe>
+                <skip-surefire>true</skip-surefire>
+                <skip-failsafe>true</skip-failsafe>
             </properties>
         </profile>
     </profiles>
