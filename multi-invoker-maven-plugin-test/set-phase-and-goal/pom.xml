@@ -21,7 +21,7 @@
     <parent>
         <groupId>com.github.shiver-me-timbers</groupId>
         <artifactId>multi-invoker-maven-plugin-test</artifactId>
-        <version>1.1-SNAPSHOT</version>
+        <version>1.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>set-phase-and-goal</artifactId>
@@ -73,7 +73,7 @@
             <plugin>
                 <groupId>com.github.shiver-me-timbers</groupId>
                 <artifactId>multi-invoker-maven-plugin</artifactId>
-                <version>1.1-SNAPSHOT</version>
+                <version>1.2-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <id>multi-invoker</id>
@@ -136,7 +136,7 @@
         <dependency>
             <groupId>com.github.shiver-me-timbers</groupId>
             <artifactId>set-phase-and-goal-it</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>1.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
