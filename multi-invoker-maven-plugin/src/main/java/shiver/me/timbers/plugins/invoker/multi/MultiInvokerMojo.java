@@ -46,19 +46,19 @@ public class MultiInvokerMojo extends AbstractMojo implements MultiInvokerConfig
     @Component
     private Invoker invoker;
 
-    @Parameter
+    @Parameter(property = "multi-invoker.logLevel")
     private LogLevel logLevel;
 
-    @Parameter(defaultValue = "false")
+    @Parameter(defaultValue = "false", property = "multi-invoker.forEachProfile")
     private boolean forEachProfile;
 
-    @Parameter
+    @Parameter(property = "multi-invoker.invocations")
     private String invocations;
 
-    @Parameter
+    @Parameter(property = "multi-invoker.profiles")
     private String profiles;
 
-    @Parameter
+    @Parameter(property = "multi-invoker.goals")
     private String goals;
 
     @Parameter
