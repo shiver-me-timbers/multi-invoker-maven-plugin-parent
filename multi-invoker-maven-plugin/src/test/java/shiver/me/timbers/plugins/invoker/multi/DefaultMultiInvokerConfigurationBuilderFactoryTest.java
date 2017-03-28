@@ -23,6 +23,11 @@ import static shiver.me.timbers.matchers.Matchers.hasFieldThat;
 public class DefaultMultiInvokerConfigurationBuilderFactoryTest {
 
     @Test
+    public void Instantiation_for_coverage() {
+        new DefaultMultiInvokerConfigurationBuilderFactory();
+    }
+
+    @Test
     @SuppressWarnings("unchecked")
     public void Can_create_an_invocation_configuration_builder() {
 
