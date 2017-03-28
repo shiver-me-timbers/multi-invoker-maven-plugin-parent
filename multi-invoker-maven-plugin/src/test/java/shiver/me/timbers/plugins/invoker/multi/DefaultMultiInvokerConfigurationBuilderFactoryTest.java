@@ -26,6 +26,7 @@ public class DefaultMultiInvokerConfigurationBuilderFactoryTest {
     @SuppressWarnings("unchecked")
     public void Can_create_an_invocation_configuration_builder() {
 
+        final LogFactory logFactory = mock(LogFactory.class);
         final MultiInvokerConfiguration configuration = mock(MultiInvokerConfiguration.class);
 
         final Log log = mock(Log.class);
@@ -49,10 +50,11 @@ public class DefaultMultiInvokerConfigurationBuilderFactoryTest {
         properties.setProperty(someAlphanumericString(21), someAlphanumericString(34));
 
         // When
-        final MultiInvokerConfigurationBuilder actual = new DefaultMultiInvokerConfigurationBuilderFactory()
+        final MultiInvokerConfigurationBuilder actual = new DefaultMultiInvokerConfigurationBuilderFactory(logFactory)
             .createWith(configuration);
 
         // Then
+        assertThat(actual, hasField("logFactory", logFactory));
         assertThat(actual, hasField("log", log));
         assertThat(actual, hasField("invocationId", invocationId));
         assertThat(actual, hasField("forEachProfile", forEachProfile));

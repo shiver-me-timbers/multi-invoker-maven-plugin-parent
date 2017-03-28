@@ -16,20 +16,22 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static shiver.me.timbers.data.random.RandomBooleans.someBoolean;
 import static shiver.me.timbers.data.random.RandomEnums.someEnum;
 import static shiver.me.timbers.data.random.RandomStrings.someAlphanumericString;
 import static shiver.me.timbers.data.random.RandomStrings.someString;
 import static shiver.me.timbers.matchers.Matchers.hasField;
-import static shiver.me.timbers.matchers.Matchers.hasProperty;
 
 public class ConfigurationMultiInvokerConfigurationBuilderTest {
 
     private MultiInvokerConfiguration configuration;
+    private LogFactory logFactory;
 
     @Before
     public void setUp() {
         configuration = mock(MultiInvokerConfiguration.class);
+        logFactory = mock(LogFactory.class);
     }
 
     @Test
@@ -37,16 +39,38 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
 
         final LogLevel logLevel = someEnum(LogLevel.class);
 
+        final Log log = mock(Log.class);
+
         // Given
         given(configuration.getProperties()).willReturn(new Properties());
+        given(logFactory.create(logLevel)).willReturn(log);
 
         // When
         final ConfigurationMultiInvokerConfigurationBuilder builder =
-            new ConfigurationMultiInvokerConfigurationBuilder(configuration);
+            new ConfigurationMultiInvokerConfigurationBuilder(configuration, logFactory);
         builder.withLogLevel(logLevel);
 
         // Then
-        assertThat(builder, hasField("logLevel", logLevel));
+        assertThat(builder, hasField("log", log));
+    }
+
+    @Test
+    public void Cannot_set_the_invocations_log_level_if_null_supplied() {
+
+        final Log log = mock(Log.class);
+
+        // Given
+        given(configuration.getProperties()).willReturn(new Properties());
+        given(configuration.getLog()).willReturn(log);
+
+        // When
+        final ConfigurationMultiInvokerConfigurationBuilder builder =
+            new ConfigurationMultiInvokerConfigurationBuilder(configuration, logFactory);
+        builder.withLogLevel(null);
+
+        // Then
+        assertThat(builder, hasField("log", log));
+        verifyZeroInteractions(logFactory);
     }
 
     @Test
@@ -59,7 +83,7 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
 
         // When
         final ConfigurationMultiInvokerConfigurationBuilder builder =
-            new ConfigurationMultiInvokerConfigurationBuilder(configuration);
+            new ConfigurationMultiInvokerConfigurationBuilder(configuration, logFactory);
         builder.withInvocationId(invocationId);
 
         // Then
@@ -82,7 +106,7 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
 
         // When
         final ConfigurationMultiInvokerConfigurationBuilder builder =
-            new ConfigurationMultiInvokerConfigurationBuilder(configuration);
+            new ConfigurationMultiInvokerConfigurationBuilder(configuration, logFactory);
         builder.withProfile(profile);
 
         // Then
@@ -118,7 +142,7 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
         properties.setProperty(someAlphanumericString(21), someAlphanumericString(34));
 
         // When
-        final MultiInvokerConfiguration actual = new ConfigurationMultiInvokerConfigurationBuilder(configuration)
+        final MultiInvokerConfiguration actual = new ConfigurationMultiInvokerConfigurationBuilder(configuration, logFactory)
             .build();
 
         // Then
@@ -131,21 +155,5 @@ public class ConfigurationMultiInvokerConfigurationBuilderTest {
         assertThat(actual.getProfiles(), equalTo(profiles));
         assertThat(actual.getGoals(), equalTo(goals));
         assertThat(actual.getProperties(), equalTo(properties));
-    }
-
-    @Test
-    public void Can_build_a_configuration_with_a_log_level() {
-
-        final LogLevel logLevel = someEnum(LogLevel.class);
-
-        // Given
-        given(configuration.getProperties()).willReturn(new Properties());
-
-        // When
-        final MultiInvokerConfiguration actual = new ConfigurationMultiInvokerConfigurationBuilder(configuration)
-            .withLogLevel(logLevel).build();
-
-        // Then
-        assertThat(actual.getLog(), hasProperty("logger.threshold", logLevel.getThreshold()));
     }
 }

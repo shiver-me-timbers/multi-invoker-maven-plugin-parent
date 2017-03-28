@@ -4,6 +4,11 @@ import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.shared.invoker.InvocationOutputHandler;
 import org.codehaus.plexus.component.annotations.Component;
 
+import static shiver.me.timbers.plugins.invoker.multi.LogLevel.DEBUG;
+import static shiver.me.timbers.plugins.invoker.multi.LogLevel.ERROR;
+import static shiver.me.timbers.plugins.invoker.multi.LogLevel.FATAL;
+import static shiver.me.timbers.plugins.invoker.multi.LogLevel.WARN;
+
 /**
  * @author Karl Bennett
  */
@@ -15,6 +20,21 @@ class DefaultOutputHandlerFactory implements OutputHandlerFactory {
         return new InvocationOutputHandler() {
             @Override
             public void consumeLine(String line) {
+                if (line.startsWith(DEBUG.prefix())) {
+                    log.debug(line);
+                    return;
+                }
+
+                if (line.startsWith(WARN.prefix())) {
+                    log.warn(line);
+                    return;
+                }
+
+                if (line.startsWith(ERROR.prefix()) || line.startsWith(FATAL.prefix())) {
+                    log.error(line);
+                    return;
+                }
+
                 log.info(line);
             }
         };

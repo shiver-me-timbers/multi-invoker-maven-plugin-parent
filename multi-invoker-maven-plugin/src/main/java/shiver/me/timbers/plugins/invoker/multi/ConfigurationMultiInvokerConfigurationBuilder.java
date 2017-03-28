@@ -1,10 +1,8 @@
 package shiver.me.timbers.plugins.invoker.multi;
 
 import org.apache.maven.execution.MavenSession;
-import org.apache.maven.monitor.logging.DefaultLog;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
-import org.codehaus.plexus.logging.console.ConsoleLogger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,27 +19,32 @@ class ConfigurationMultiInvokerConfigurationBuilder implements MultiInvokerConfi
     private final List<String> invocations;
     private final List<String> profiles;
     private String invocationId;
-    private final Log log;
+    private Log log;
     private final List<String> goals;
     private final Properties properties;
-    private LogLevel logLevel;
+    private final LogFactory logFactory;
 
-    ConfigurationMultiInvokerConfigurationBuilder(MultiInvokerConfiguration configuration) {
-        project = configuration.getProject();
-        session = configuration.getSession();
-        forEachProfile = configuration.isForEachProfile();
-        invocations = new ArrayList<>(configuration.getInvocations());
-        profiles = new ArrayList<>(configuration.getProfiles());
-        invocationId = configuration.getInvocationId();
-        log = configuration.getLog();
-        goals = new ArrayList<>(configuration.getGoals());
-        properties = new Properties();
-        properties.putAll(configuration.getProperties());
+    ConfigurationMultiInvokerConfigurationBuilder(MultiInvokerConfiguration configuration, LogFactory logFactory) {
+        this.project = configuration.getProject();
+        this.session = configuration.getSession();
+        this.forEachProfile = configuration.isForEachProfile();
+        this.invocations = new ArrayList<>(configuration.getInvocations());
+        this.profiles = new ArrayList<>(configuration.getProfiles());
+        this.invocationId = configuration.getInvocationId();
+        this.log = configuration.getLog();
+        this.goals = new ArrayList<>(configuration.getGoals());
+        this.properties = new Properties();
+        this.properties.putAll(configuration.getProperties());
+        this.logFactory = logFactory;
     }
 
     @Override
     public MultiInvokerConfigurationBuilder withLogLevel(LogLevel logLevel) {
-        this.logLevel = logLevel;
+        // If no log level is supplied then keep using the default log.
+        if (logLevel == null) {
+            return this;
+        }
+        this.log = logFactory.create(logLevel);
         return this;
     }
 
@@ -72,8 +75,7 @@ class ConfigurationMultiInvokerConfigurationBuilder implements MultiInvokerConfi
 
             @Override
             public Log getLog() {
-                return logLevel != null ?
-                    new DefaultLog(new ConsoleLogger(logLevel.getThreshold(), "multi-invoker")) : log;
+                return log;
             }
 
             @Override

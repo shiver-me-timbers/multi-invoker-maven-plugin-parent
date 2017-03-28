@@ -38,8 +38,7 @@ public class DefaultMultiInvokerConfigurationReplacerTest {
         final Log log = mock(Log.class);
         final String invocationid = someString();
         final boolean forEachProfile = someBoolean();
-        @SuppressWarnings("unchecked")
-        final List<String> items = mock(List.class);
+        @SuppressWarnings("unchecked") final List<String> items = mock(List.class);
         final String profile1 = someString();
         final String profile2 = someString();
         final String profile3 = someString();

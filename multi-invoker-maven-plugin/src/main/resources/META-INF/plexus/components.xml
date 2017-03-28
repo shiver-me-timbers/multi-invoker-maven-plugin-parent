@@ -18,64 +18,63 @@
         <component>
             <role>shiver.me.timbers.plugins.invoker.multi.MultiInvokerConfigurationFactory</role>
             <role-hint>default</role-hint>
-            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultMultiInvokerConfigurationFactory
-            </implementation>
+            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultMultiInvokerConfigurationFactory</implementation>
             <description/>
             <isolated-realm>false</isolated-realm>
         </component>
         <component>
             <role>shiver.me.timbers.plugins.invoker.multi.MultiInvokerConfigurationReplacer</role>
             <role-hint>default</role-hint>
-            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultMultiInvokerConfigurationReplacer
-            </implementation>
+            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultMultiInvokerConfigurationReplacer</implementation>
             <description/>
             <isolated-realm>false</isolated-realm>
         </component>
         <component>
             <role>shiver.me.timbers.plugins.invoker.multi.StringReplacer</role>
             <role-hint>default</role-hint>
-            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultStringReplacer
-            </implementation>
+            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultStringReplacer</implementation>
             <description/>
             <isolated-realm>false</isolated-realm>
         </component>
         <component>
             <role>shiver.me.timbers.plugins.invoker.multi.InvocationRequestFactory</role>
             <role-hint>default</role-hint>
-            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultInvocationRequestFactory
-            </implementation>
+            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultInvocationRequestFactory</implementation>
             <description/>
             <isolated-realm>false</isolated-realm>
         </component>
         <component>
             <role>shiver.me.timbers.plugins.invoker.multi.MavenStrings</role>
             <role-hint>default</role-hint>
-            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultMavenStrings
-            </implementation>
+            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultMavenStrings</implementation>
             <description/>
             <isolated-realm>false</isolated-realm>
         </component>
         <component>
             <role>shiver.me.timbers.plugins.invoker.multi.MultiInvokerConfigurationBuilderFactory</role>
             <role-hint>default</role-hint>
-            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultMultiInvokerConfigurationBuilderFactory
-            </implementation>
+            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultMultiInvokerConfigurationBuilderFactory</implementation>
             <description/>
             <isolated-realm>false</isolated-realm>
         </component>
         <component>
             <role>shiver.me.timbers.plugins.invoker.multi.OutputHandlerFactory</role>
             <role-hint>default</role-hint>
-            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultOutputHandlerFactory
-            </implementation>
+            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultOutputHandlerFactory</implementation>
             <description/>
             <isolated-realm>false</isolated-realm>
         </component>
         <component>
             <role>shiver.me.timbers.plugins.invoker.multi.PropertiesAppender</role>
             <role-hint>default</role-hint>
-            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultPropertiesAppender
-            </implementation>
+            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultPropertiesAppender</implementation>
+            <description/>
+            <isolated-realm>false</isolated-realm>
+        </component>
+        <component>
+            <role>shiver.me.timbers.plugins.invoker.multi.LogFactory</role>
+            <role-hint>default</role-hint>
+            <implementation>shiver.me.timbers.plugins.invoker.multi.DefaultLogFactory</implementation>
             <description/>
             <isolated-realm>false</isolated-realm>
         </component>
